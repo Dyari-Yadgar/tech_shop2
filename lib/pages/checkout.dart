@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,9 +24,9 @@ class _checkOutState extends State<checkOut> {
     isLogin = pref.getBool('isLogin') ?? false;
     setState(() {});
   }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
@@ -152,25 +154,174 @@ class _checkOutState extends State<checkOut> {
                                         0, 2)) //offset shwenakayate
                               ]),
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (isLogin) {
-                                // Show success dialog
+                            onPressed: () async {
+                              if (FirebaseAuth.instance.currentUser != null) {
+                                ItemData.buyData.clear();
+                                setState(() {});
                                 showDialog(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text('Purchase Successful'),
-                                    content:
-                                        Text('Your purchase was successful!'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text('OK'),
-                                      ),
-                                    ],
-                                  ),
+                                  builder: (BuildContext context) {
+                                    bool ifCashSelected = false;
+                                    bool ifCreditCardSelected = false;
+                                    bool ifFIBSelected = false;
+                                    bool ifFastpaySelected = false;
+                                    bool ifQCardSelected = false;
+                                    bool canPay = false;
+
+                                    return StatefulBuilder(
+                                      builder: (BuildContext context,
+                                          StateSetter setState) {
+                                        return AlertDialog(
+                                          title: Text('Select Payment Method'),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              // Cash Checkbox
+                                              CheckboxListTile(
+                                                title: Text('Cash'),
+                                                value: ifCashSelected,
+                                                onChanged: ifCreditCardSelected
+                                                    ? null
+                                                    : (bool? value) {
+                                                        setState(() {
+                                                          ifCashSelected =
+                                                              value ?? false;
+                                                          if (ifCashSelected) {
+                                                            ifCreditCardSelected =
+                                                                false;
+                                                          }
+                                                          canPay =
+                                                              ifCashSelected;
+                                                        });
+                                                      },
+                                              ),
+                                              // Credit Card Checkbox
+                                              CheckboxListTile(
+                                                title: Text('Credit Card'),
+                                                value: ifCreditCardSelected,
+                                                onChanged: ifCashSelected
+                                                    ? null
+                                                    : (bool? value) {
+                                                        setState(() {
+                                                          ifCreditCardSelected =
+                                                              value ?? false;
+                                                          if (ifCreditCardSelected) {
+                                                            ifCashSelected =
+                                                                false;
+                                                          }
+
+                                                          canPay =
+                                                              ifCreditCardSelected
+                                                                  ? false
+                                                                  : canPay;
+                                                        });
+                                                      },
+                                              ),
+                                              // Nested checkboxes visible only if Credit Card is selected (but all will be disabled for now)
+                                              if (ifCreditCardSelected) ...[
+                                                CheckboxListTile(
+                                                  title: Text('Payment by FIB'),
+                                                  value: ifFIBSelected,
+                                                  onChanged: (bool? value) {
+                                                    setState(() {
+                                                      ifFIBSelected =
+                                                          value ?? false;
+                                                    });
+                                                  },
+                                                  enabled:
+                                                      false, // Disable this checkbox for now
+                                                ),
+                                                CheckboxListTile(
+                                                  title: Text(
+                                                      'Payment by Fastpay'),
+                                                  value: ifFastpaySelected,
+                                                  onChanged: (bool? value) {
+                                                    setState(() {
+                                                      ifFastpaySelected =
+                                                          value ?? false;
+                                                    });
+                                                  },
+                                                  enabled:
+                                                      false, // Disable this checkbox for now
+                                                ),
+                                                CheckboxListTile(
+                                                  title:
+                                                      Text('Payment by QCard'),
+                                                  value: ifQCardSelected,
+                                                  onChanged: (bool? value) {
+                                                    setState(() {
+                                                      ifQCardSelected =
+                                                          value ?? false;
+                                                    });
+                                                  },
+                                                  enabled:
+                                                      false, // Disable this checkbox for now
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                          actions: [
+                                            Center(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: WidgetStyle.primary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: TextButton(
+                                                  onPressed: canPay
+                                                      ? () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    'Purchase Successful'),
+                                                                content: Text(
+                                                                  ifCashSelected
+                                                                      ? 'Your purchase was successful! Payment method: Cash'
+                                                                      : '',
+                                                                ),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            context),
+                                                                    child: Text(
+                                                                        'OK'),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        }
+                                                      : null,
+                                                  child: Text(
+                                                    'Pay',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            if (!canPay)
+                                              Text(
+                                                'Please select a payment method before Paying.',
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
                                 );
                               } else {
-                                // Navigate to the Login page
                                 Navigator.push(
                                   context,
                                   CupertinoPageRoute(

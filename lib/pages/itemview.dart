@@ -234,11 +234,10 @@ class _ItemViewState extends State<ItemView> {
                 child: IconButton(
                     onPressed: () {
                       setState(() {
-                        // true bw bekata false
                         if (!isfavorite) {
-                          ItemData.favorites.add(widget.item);
+                          ItemData.favorites.add(widget.item.id);
                         } else {
-                          ItemData.favorites.remove(widget.item);
+                          ItemData.favorites.remove(widget.item.id);
                         }
                         isfavorite = !isfavorite;
                       });

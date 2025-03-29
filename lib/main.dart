@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tech_shop/Auth/signup.dart';
 
 import 'package:tech_shop/WidgetStyle.dart';
 import 'package:tech_shop/pages/checkOut.dart';
@@ -19,6 +20,8 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -35,6 +38,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});

@@ -29,7 +29,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget> {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.horizontal(
                       left: Radius.circular(35), right: Radius.circular(20)),
-                  child: Image.asset(
+                  child: Image.network(
                     widget.item.image,
                     fit: BoxFit.cover,
                   ),

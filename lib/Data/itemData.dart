@@ -26,15 +26,15 @@ class ItemData {
     }),
   ];
 
-  static List<itemModel> favorites = [];
+  static List<String> favorites = [];
 
   static bool checkItemFavorite(itemModel item) {
     bool r = false;
-    for (var element in favorites) {
-      if (element == item) {
+    favorites.forEach((element) {
+      if (element == item.id) {
         r = true;
       }
-    }
+    });
     return r;
   }
 

@@ -22,10 +22,10 @@ class _HomePage2State extends State<HomePage2> {
   TextEditingController search = TextEditingController();
   String sharika = '';
   String searchKey = '';
-   String upperCaseValue = '';
+  String upperCaseValue = '';
 
   int selectedIndex = -1;
-  List typeFilter = ['هەمووی', 'نرخ', 'قەبارە'];
+  List typeFilter = ['All', 'Price', 'Storage'];
   int selectedIndexType = 0;
   List<itemModel> data = [];
   List nameSharika = [];
@@ -57,10 +57,10 @@ class _HomePage2State extends State<HomePage2> {
                                 filter(reloadWidget, nameSharika)),
                       );
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.menu_rounded,
                       size: 30,
-                      color: Colors.white,
+                      color: WidgetStyle.primary,
                     )),
               ),
               const SizedBox(width: 8),
@@ -206,7 +206,7 @@ class _HomePage2State extends State<HomePage2> {
         searchKey == '') {
       return instance
           .collection('items')
-          .orderBy(typeFilter[selectedIndexType] == 'نرخ' ? 'price' : 'storage')
+          .orderBy(typeFilter[selectedIndexType] == 'Price' ? 'price' : 'storage')
           .where('sharika', isEqualTo: sharika)
           .get();
     } else if (selectedIndex == -1 &&
@@ -214,7 +214,7 @@ class _HomePage2State extends State<HomePage2> {
         searchKey == '') {
       return instance
           .collection('items')
-          .orderBy(typeFilter[selectedIndexType] == 'نرخ' ? 'price' : 'storage')
+          .orderBy(typeFilter[selectedIndexType] == 'Price' ? 'price' : 'storage')
           .get();
     }
     // agar bas search bw
@@ -240,6 +240,14 @@ class _HomePage2State extends State<HomePage2> {
   }
 
   Widget itemCard(itemModel item) {
+        String storage = item.storage.toString();
+    if (item.storage == 1024) {
+      storage = '1TB';
+    } else if (item.storage == 2048) {
+      storage = '2TB';
+    } else {
+      storage = item.storage.toString() + 'GB';
+    }
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -284,10 +292,10 @@ class _HomePage2State extends State<HomePage2> {
               ),
             ),
           ),
-          Text('${item.price}\$: نرخ '),
+          Text('Price :  \$${item.price}'),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text(item.storage.toString()), const Text(' : قەبارە')],
+            children: [ const Text('Storage : '), Text(storage)],
           )
         ],
       ),
@@ -313,20 +321,28 @@ class _HomePage2State extends State<HomePage2> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      reloadWidget(() {
+                        selectedIndexType = 0;
+                        selectedIndex = -1;
+                        searchKey = '';
+                      });
+                    });
+                  },
                   child: const Text(
-                    'گەرانەوە',
+                    'Clear',
                     style: TextStyle(color: Colors.black),
                   )),
               const Expanded(child: SizedBox()),
               const Text(
-                'فلتەر',
+                'Filtering',
                 style: TextStyle(fontSize: 25),
               ),
             ],
           ),
           const SizedBox(height: 20),
-          const Text('ڕیزکردن بە پێی '),
+          const Text('Filter By'),
           const SizedBox(height: 10),
           SizedBox(
             height: 40,
@@ -369,7 +385,7 @@ class _HomePage2State extends State<HomePage2> {
                         ))),
           ),
           const SizedBox(height: 20),
-          const Text('شەریکە'),
+          const Text('Brand Name'),
           const SizedBox(height: 10),
           SizedBox(
             height: 40,
@@ -397,7 +413,7 @@ class _HomePage2State extends State<HomePage2> {
                           child: Container(
                             alignment: Alignment.center,
                             margin: EdgeInsets.only(
-                                left: index == typeFilter.length - 1 ? 0 : 10),
+                                left: index == nameSharika.length - 1 ? 0 : 10),
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
                                 color: selectedIndex == index

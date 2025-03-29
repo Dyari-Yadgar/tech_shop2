@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_shop/Data/ItemData.dart';
@@ -13,6 +15,7 @@ class favorite extends StatefulWidget {
 }
 
 class _favoriteState extends State<favorite> {
+  FirebaseFirestore instance = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,20 +24,48 @@ class _favoriteState extends State<favorite> {
         child: Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 20),
-        child: ItemData.favorites.isNotEmpty
-            ? ListView(
-                scrollDirection: Axis.vertical,
-                children: List.generate(ItemData.favorites.length,
-                    (index) => favoriteItem(size, ItemData.favorites[index])),
-              )
+        child: ItemData.favorites.length != 0
+            ? FutureBuilder(
+                future: getData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  List<itemModel> data = snapshot.data!.docs
+                      .map((e) => itemModel.fromJson(e.data()))
+                      .toList();
+                  return ListView(
+                    scrollDirection: Axis.vertical,
+                    children: List.generate(data.length,
+                        (index) => favoriteItem(size, data[index])),
+                  );
+                })
             : const Center(
-                child: Text('No any Favorite'),
+                child: Text('No Data Available'),
               ),
       ),
     ));
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getData() {
+    return instance
+        .collection('items')
+        .orderBy('id')
+        .where('id', whereIn: ItemData.favorites.toList())
+        .get();
+  }
+
   Widget favoriteItem(Size size, itemModel item) {
+    String storage = item.storage.toString();
+    if (item.storage == 1024) {
+      storage = '1TB';
+    } else if (item.storage == 2048) {
+      storage = '2TB';
+    } else {
+      storage = item.storage.toString() + 'GB';
+    }
     return InkWell(
       onTap: () => Navigator.push(
           context,
@@ -55,7 +86,7 @@ class _favoriteState extends State<favorite> {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.horizontal(
                       left: Radius.circular(35), right: Radius.circular(20)),
-                  child: Image.asset(
+                  child: Image.network(
                     item.image,
                     fit: BoxFit.cover,
                   ),
@@ -88,7 +119,7 @@ class _favoriteState extends State<favorite> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text('${item.price}\$'),
-                    Text(item.storage.toString()),
+                    Text(storage),
                   ],
                 ),
               ),

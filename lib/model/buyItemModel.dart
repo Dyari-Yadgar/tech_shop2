@@ -2,7 +2,7 @@
 class buyItemModel {
   late String name;
   late int price;
-  late String storage;
+  late int storage;
   late String sharika;
   late String image;
 

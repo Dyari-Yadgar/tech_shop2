@@ -225,6 +225,7 @@ class _ProfileState extends State<Profile> {
                                   width: 30,
                                   child: IconButton(
                                     onPressed: () {
+                                      print(FirebaseAuth.instance.currentUser?.emailVerified);
                                       setState(() {
                                         isEdite = !isEdite;
                                       });
