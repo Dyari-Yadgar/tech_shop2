@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_shop/Auth/login.dart';
+import 'package:tech_shop/Auth/forgotpassword.dart';
 import 'package:tech_shop/widgetstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -16,6 +17,9 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   Future signInWithGoogle() async {
+    setState(() {
+      isSignup = !isSignup;
+    });
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -31,13 +35,36 @@ class _SignupState extends State<Signup> {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    User user = await FirebaseAuth.instance.currentUser!;
-    await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-      'name': user.displayName,
-      'email': user.email,
-      'history': [],
-    }).then((value) => Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => BottomNavigation(),)));
+
+    //agar user habw sign in akat, agar nabw awa boman drwstakat
+    //bo away datay usery drwstkraw nafawte
+    User user = FirebaseAuth.instance.currentUser!;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) async {
+      if (!value.exists) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'name': user.displayName,
+          'email': user.email,
+          'history': [],
+        }).then((value) => Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => BottomNavigation(),
+            )));
+      } else {
+        Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => BottomNavigation(),
+            ));
+      }
+    });
   }
+
+  bool isSignup = false;
 
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -170,52 +197,112 @@ class _SignupState extends State<Signup> {
                                 )),
                             onPressed: () async {
                               if (emailValid.currentState!.validate() &&
-                                  passValid.currentState!.validate()) {
+                                  passValid.currentState!.validate() &&
+                                  !isSignup) {
                                 try {
-                                  await FirebaseAuth.instance
-                                      .createUserWithEmailAndPassword(
-                                          email: emailController.text,
-                                          password: passController.text)
-                                      .then((value) async {
-                                    await FirebaseAuth.instance.currentUser!
-                                        .updateDisplayName(
-                                            userNameController.text)
-                                        .then((value) async {
-                                      User user =
-                                          FirebaseAuth.instance.currentUser!;
-                                      await FirebaseFirestore.instance
-                                          .collection('users')
-                                          .doc(user.uid)
-                                          .set({
-                                        'name': user.displayName,
-                                        'email': user.email,
-                                        'history': [],
-                                      });
-                                    }).then((value) async {
-                                      await FirebaseAuth.instance.currentUser!
-                                          .sendEmailVerification()
-                                          .then((value) async {
-                                        await FirebaseAuth.instance.signOut();
-                                      });
-                                    });
+                                  setState(() {
+                                    isSignup = !isSignup;
                                   });
+                                  UserCredential userCredential =
+                                      await FirebaseAuth.instance
+                                          .createUserWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passController.text,
+                                  );
+
+                                  User? user = userCredential.user;
+                                  if (user == null)
+                                    throw FirebaseAuthException(
+                                        code: 'user-null');
+
+                                  // Update Display Name
+                                  await user.updateDisplayName(
+                                      userNameController.text);
+
+                                  // Save User Info in Firestore
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user.uid)
+                                      .set({
+                                    'name': user.displayName,
+                                    'email': user.email,
+                                    'history': [],
+                                  });
+
+                                  // Send Verification Email
+                                  await user.sendEmailVerification();
+
+                                  // Logout User After Registration
+                                  await FirebaseAuth.instance.signOut();
+
+                                  if (!mounted) return;
+
+                                  // Show Success Dialog
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Verify Your Email"),
+                                      content: Text(
+                                          "A verification email has been sent. Please check your inbox."),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.pushReplacement(
+                                                context,
+                                                CupertinoPageRoute(
+                                                    builder: (context) =>
+                                                        Login()));
+                                          },
+                                          child: Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  if (!mounted) return;
+
+                                  String errorMessage = "An error occurred";
+                                  if (e.code == 'email-already-in-use') {
+                                    errorMessage =
+                                        "The email is already in use.";
+                                  }
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Error"),
+                                      content: Text(errorMessage),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              CupertinoPageRoute(
+                                                  builder: (context) =>
+                                                      Signup()),
+                                            );
+                                          },
+                                          child: Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
                                 } catch (e) {
-                                  // ignore: avoid_print
                                   print("Error during account creation: $e");
                                 }
-
-                                Navigator.pushReplacement(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => Login(),
-                                    ));
                               }
                             },
-                            child: Text(
-                              'Create a new account',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ))),
+                            child: isSignup
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    'Create a new account',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 15),
+                                  ))),
                     SizedBox(
                       width: 10,
                     ),
@@ -229,7 +316,13 @@ class _SignupState extends State<Signup> {
               ],
             ),
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => ForgotPassword(),
+                      ));
+                },
                 child: Text(
                   'Forgot your password?',
                   style: TextStyle(color: WidgetStyle.primary),

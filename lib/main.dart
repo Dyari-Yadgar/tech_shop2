@@ -3,15 +3,20 @@ import 'package:tech_shop/Auth/signup.dart';
 
 import 'package:tech_shop/WidgetStyle.dart';
 import 'package:tech_shop/pages/checkOut.dart';
+import 'package:tech_shop/Auth/forgotpassword.dart';
+import 'package:tech_shop/pages/menu.dart';
+import 'package:tech_shop/pages/pcbuild.dart';
 import 'package:tech_shop/pages/profile.dart';
-
 
 import 'pages/homepage2.dart';
 import 'pages/favorite.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+// import 'package:provider_installer/provider_installer.dart';
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await ProviderInstaller.installProviders();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -19,8 +24,6 @@ Future<void> main() async {
 
   runApp(const MyApp());
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -34,12 +37,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: BottomNavigation(),
+      home: PcBuild(),
     );
   }
 }
-
-
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
@@ -57,6 +58,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
           'Tech Shop',
@@ -88,7 +90,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       ),
       endDrawer: Drawer(
         backgroundColor: Colors.white,
-        child: Profile(),
+        child: Menu(),
       ),
       body: pages.elementAt(BottomNavigation.pageindex),
       bottomNavigationBar: BottomNavigationBar(

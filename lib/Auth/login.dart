@@ -6,6 +6,7 @@ import 'package:tech_shop/Auth/signup.dart';
 import 'package:tech_shop/main.dart';
 import 'package:tech_shop/WidgetStyle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tech_shop/Auth/forgotpassword.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -16,6 +17,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   Future signInWithGoogle() async {
+    setState(() {
+      isLogin = !isLogin;
+    });
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -31,11 +35,32 @@ class _LoginState extends State<Login> {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => BottomNavigation(),
-        ));
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+    User user = await FirebaseAuth.instance.currentUser!;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) async {
+      if (!value.exists) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'name': user.displayName,
+          'email': user.email,
+          'history': [],
+        }).then((value) => Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => BottomNavigation(),
+            )));
+      } else {
+        Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => BottomNavigation(),
+            ));
+      }
+    });
   }
 
   TextEditingController emailController = TextEditingController();
@@ -147,7 +172,8 @@ class _LoginState extends State<Login> {
                                 )),
                             onPressed: () async {
                               if (emailValid.currentState!.validate() &&
-                                  passValid.currentState!.validate()) {
+                                  passValid.currentState!.validate() &&
+                                  !isLogin) {
                                 try {
                                   setState(() {});
                                   await FirebaseAuth.instance
@@ -165,6 +191,7 @@ class _LoginState extends State<Login> {
                                                 BottomNavigation(),
                                           ));
                                     } else {
+                                      FirebaseAuth.instance.signOut;
                                       showDialog(
                                         // ignore: use_build_context_synchronously
                                         context: context,
@@ -190,7 +217,32 @@ class _LoginState extends State<Login> {
                                       );
                                     }
                                   });
-                                } catch (e) {}
+                                } on FirebaseAuthException catch (e) {
+                                  if (!mounted) return;
+
+                                  String errorMessage =
+                                      "Username or Password is wrong";
+                                  if (e.code == 'email-already-in-use') {
+                                    errorMessage =
+                                        "The email is already in use.";
+                                  }
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Error"),
+                                      content: Text(errorMessage),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                } catch (e) {
+                                  print("Error during account creation: $e");
+                                }
                               }
                             },
                             child: isLogin
@@ -214,7 +266,13 @@ class _LoginState extends State<Login> {
                 height: 10,
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => ForgotPassword(),
+                        ));
+                  },
                   child: Text(
                     'Forgot your password?',
                     style: TextStyle(color: WidgetStyle.primary),

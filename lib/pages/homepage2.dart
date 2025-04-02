@@ -293,10 +293,7 @@ class _HomePage2State extends State<HomePage2> {
             ),
           ),
           Text('Price :  \$${item.price}'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [ const Text('Storage : '), Text(storage)],
-          )
+          
         ],
       ),
     );
