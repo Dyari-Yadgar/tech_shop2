@@ -88,10 +88,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           setState(() {
                             isSend = !isSend;
                           });
-                          bool emailExists =
-                              await doesEmailExist(emailController.text);
-
-                          print(emailController.text);
                           showDialog(
                             // ignore: use_build_context_synchronously
                             context: context,
@@ -132,6 +128,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 }
 
+// ignore: non_constant_identifier_names
 OutlineInputBorder Border() {
   return OutlineInputBorder(
     borderSide: BorderSide(color: WidgetStyle.primary, width: 2),

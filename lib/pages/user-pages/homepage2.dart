@@ -4,9 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tech_shop/Data/ItemData.dart';
 import 'package:tech_shop/model/itemmodel.dart';
-import 'package:tech_shop/pages/itemview.dart';
+import 'package:tech_shop/pages/user-pages/itemview.dart';
 import 'package:tech_shop/WidgetStyle.dart';
 
 class HomePage2 extends StatefulWidget {
@@ -58,7 +57,7 @@ class _HomePage2State extends State<HomePage2> {
                       );
                     },
                     icon: Icon(
-                      Icons.menu_rounded,
+                      Icons.filter_alt,
                       size: 30,
                       color: WidgetStyle.primary,
                     )),
@@ -239,8 +238,7 @@ class _HomePage2State extends State<HomePage2> {
     return instance.collection('items').get();
   }
 
-  Widget itemCard(itemModel item) {
-        String storage = item.storage.toString();
+  Widget itemCard(itemModel item) {String storage = item.storage.toString();
     if (item.storage == 1024) {
       storage = '1TB';
     } else if (item.storage == 2048) {

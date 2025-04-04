@@ -1,20 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tech_shop/pages/aboutapp.dart';
-import 'package:tech_shop/pages/aboutus.dart';
-import 'package:tech_shop/pages/pcbuild.dart';
-import 'package:tech_shop/pages/profile.dart';
+import 'package:tech_shop/main.dart';
+import 'package:tech_shop/pages/user-pages/aboutapp.dart';
+import 'package:tech_shop/pages/user-pages/aboutus.dart';
+import 'package:tech_shop/pages/user-pages/pcbuild.dart';
+import 'package:tech_shop/pages/user-pages/profile.dart';
 import 'package:tech_shop/widgetstyle.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Menu extends StatefulWidget {
-  const Menu({super.key});
+class AdminMenu extends StatefulWidget {
+  const AdminMenu({super.key});
 
   @override
-  State<Menu> createState() => _MenuState();
+  State<AdminMenu> createState() => _AdminMenuState();
 }
 
-class _MenuState extends State<Menu> {
+class _AdminMenuState extends State<AdminMenu> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -94,22 +96,46 @@ class _MenuState extends State<Menu> {
             Row(
               children: [
                 IconButton(
-                    onPressed: () {Navigator.push(
+                    onPressed: () {
+                    },
+                    icon: FaIcon(
+                      FontAwesomeIcons.users,
+                      color: WidgetStyle.primary,
+                      size: 20,
+                    )),
+                TextButton(
+                    onPressed: () {
+                    },
+                    child: Text(
+                      'Users Settings',
+                      style:
+                          TextStyle(color: WidgetStyle.primary, fontSize: 18),
+                    )),
+              ],
+            ),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
                           context,
                           CupertinoPageRoute(
                             builder: (context) => PcBuild(),
-                          ));},
+                          ));
+                    },
                     icon: FaIcon(
                       FontAwesomeIcons.computer,
                       color: WidgetStyle.primary,
                       size: 20,
                     )),
                 TextButton(
-                    onPressed: () {Navigator.push(
+                    onPressed: () {
+                      Navigator.push(
                           context,
                           CupertinoPageRoute(
                             builder: (context) => PcBuild(),
-                          ));},
+                          ));
+                    },
                     child: Text(
                       'Custom Pc Build',
                       style:
@@ -124,24 +150,19 @@ class _MenuState extends State<Menu> {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => AboutUs(),
+                            builder: (context) => PcBuild(),
                           ));
                     },
                     icon: FaIcon(
-                      FontAwesomeIcons.circleInfo,
+                      FontAwesomeIcons.history,
                       color: WidgetStyle.primary,
                       size: 20,
                     )),
                 TextButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => AboutUs(),
-                          ));
                     },
                     child: Text(
-                      'About Us',
+                      'Orders',
                       style:
                           TextStyle(color: WidgetStyle.primary, fontSize: 18),
                     )),
@@ -150,24 +171,28 @@ class _MenuState extends State<Menu> {
             Row(
               children: [
                 IconButton(
-                    onPressed: () {Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => AboutApp(),
-                          ));},
-                    icon: FaIcon(
-                      FontAwesomeIcons.info,
-                      color: WidgetStyle.primary,
-                      size: 20,
-                    )),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context).pushReplacement(
+                      CupertinoPageRoute(
+                          builder: (context) => BottomNavigation()),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.logout,
+                    color: WidgetStyle.primary,
+                  ),
+                ),
                 TextButton(
-                    onPressed: () {Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => AboutApp(),
-                          ));},
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pushReplacement(
+                        CupertinoPageRoute(
+                            builder: (context) => BottomNavigation()),
+                      );
+                    },
                     child: Text(
-                      'About Application',
+                      'Logout',
                       style:
                           TextStyle(color: WidgetStyle.primary, fontSize: 18),
                     )),

@@ -16,4 +16,6 @@ class itemModel {
     sharika= data['sharika'];
     image= data['image'];
   }
+
+  
 }

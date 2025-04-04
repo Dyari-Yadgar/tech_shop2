@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_shop/Data/ItemData.dart';
 import 'package:tech_shop/model/itemmodel.dart';
-import 'package:tech_shop/pages/itemview.dart';
+import 'package:tech_shop/pages/user-pages/itemview.dart';
 import 'package:tech_shop/WidgetStyle.dart';
 
 class favorite extends StatefulWidget {

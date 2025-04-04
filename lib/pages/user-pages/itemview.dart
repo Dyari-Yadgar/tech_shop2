@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:tech_shop/Data/ItemData.dart';
 import 'package:tech_shop/model/buyItemModel.dart';
 import 'package:tech_shop/model/itemmodel.dart';
-import 'package:tech_shop/pages/buy.dart';
+import 'package:tech_shop/pages/user-pages/buy.dart';
 import 'package:tech_shop/WidgetStyle.dart';
 
 class ItemView extends StatefulWidget {
