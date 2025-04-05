@@ -16,51 +16,50 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Future signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     setState(() {
-      isLogin = !isLogin;
+      isLogin = true;
     });
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
+    // Trigger Google Sign-In
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
 
-    // Create a new credential
+    if (googleAuth == null) return;
+
+    // Create credentials for Firebase using the Google authentication tokens
     final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
-    // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    // Sign in to Firebase with the Google credentials
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    User user = userCredential.user!;
 
-    User user = await FirebaseAuth.instance.currentUser!;
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) async {
-      if (!value.exists) {
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'name': user.displayName,
-          'email': user.email,
-          'history': [],
-        }).then((value) => Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => BottomNavigation(),
-            )));
-      } else {
-        Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => BottomNavigation(),
-            ));
-      }
-    });
+    // Check if the user document already exists in Firestore
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+    final docSnapshot = await userDoc.get();
+
+    if (!docSnapshot.exists) {
+      // If the document doesn't exist, create a new user document with role = 'user'
+      await userDoc.set({
+        'name': user.displayName ?? '',
+        'email': user.email,
+        'history': [],
+        'favorites': [],
+        'role': 'user', // Default role is 'user'
+      });
+    }
+
+    if (!mounted) return;
+
+    // Navigate to the BottomNavigation screen after successfully logging in
+    Navigator.pushReplacement(
+        context, CupertinoPageRoute(builder: (context) => BottomNavigation()));
   }
 
   TextEditingController emailController = TextEditingController();

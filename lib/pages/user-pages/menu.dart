@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tech_shop/main.dart';
 import 'package:tech_shop/pages/user-pages/aboutapp.dart';
 import 'package:tech_shop/pages/user-pages/aboutus.dart';
+import 'package:tech_shop/pages/user-pages/history.dart';
 import 'package:tech_shop/pages/user-pages/pcbuild.dart';
 import 'package:tech_shop/pages/user-pages/profile.dart';
 import 'package:tech_shop/widgetstyle.dart';
@@ -130,7 +131,7 @@ class _MenuState extends State<Menu> {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => PcBuild(),
+                            builder: (context) => History(),
                           ));
                     },
                     icon: FaIcon(
@@ -140,6 +141,11 @@ class _MenuState extends State<Menu> {
                     )),
                 TextButton(
                     onPressed: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => History(),
+                          ));
                     },
                     child: Text(
                       'Order History',
@@ -243,4 +249,5 @@ class _MenuState extends State<Menu> {
       ),
     );
   }
+
 }

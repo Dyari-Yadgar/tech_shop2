@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tech_shop/model/itemmodel.dart';
 import 'package:tech_shop/pages/user-pages/itemview.dart';
 import 'package:tech_shop/WidgetStyle.dart';
@@ -56,8 +57,8 @@ class _HomePage2State extends State<HomePage2> {
                                 filter(reloadWidget, nameSharika)),
                       );
                     },
-                    icon: Icon(
-                      Icons.filter_alt,
+                    icon: FaIcon(
+                      Icons.filter_list_sharp,
                       size: 30,
                       color: WidgetStyle.primary,
                     )),

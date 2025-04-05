@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_shop/Data/ItemData.dart';
@@ -232,13 +234,48 @@ class _ItemViewState extends State<ItemView> {
                     ],
                     borderRadius: BorderRadius.circular(15)),
                 child: IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       setState(() {
                         if (!isfavorite) {
                           ItemData.favorites.add(widget.item.id);
+                          User? user = FirebaseAuth.instance.currentUser;
+                          if (user != null) {
+                            // Add item to the Firestore user's favorites array
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user.uid)
+                                .update({
+                              'favorites':
+                                  FieldValue.arrayUnion([widget.item.id]),
+                            }).then((value) {
+                              print("Item added to Firestore favorites!");
+                            }).catchError((error) {
+                              print("Failed to add item to Firestore: $error");
+                            });
+                          }
                         } else {
+                          // Remove item from local favorites list
                           ItemData.favorites.remove(widget.item.id);
+
+                          // Also update Firestore to reflect the change
+                          User? user = FirebaseAuth.instance.currentUser;
+                          if (user != null) {
+                            // Remove item from the Firestore user's favorites array
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user.uid)
+                                .update({
+                              'favorites':
+                                  FieldValue.arrayRemove([widget.item.id]),
+                            }).then((value) {
+                              print("Item removed from Firestore favorites!");
+                            }).catchError((error) {
+                              print(
+                                  "Failed to remove item from Firestore: $error");
+                            });
+                          }
                         }
+                        // Toggle the favorite status
                         isfavorite = !isfavorite;
                       });
                     },
@@ -298,7 +335,7 @@ class _ItemViewState extends State<ItemView> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12))),
                     child: const Text(
-                      'کڕین',
+                      'Buy',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),

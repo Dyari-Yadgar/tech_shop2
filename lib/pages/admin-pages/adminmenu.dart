@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tech_shop/main.dart';
 import 'package:tech_shop/pages/user-pages/aboutapp.dart';
 import 'package:tech_shop/pages/user-pages/aboutus.dart';
+import 'package:tech_shop/pages/user-pages/history.dart';
 import 'package:tech_shop/pages/user-pages/pcbuild.dart';
 import 'package:tech_shop/pages/user-pages/profile.dart';
 import 'package:tech_shop/widgetstyle.dart';
@@ -160,6 +161,10 @@ class _AdminMenuState extends State<AdminMenu> {
                     )),
                 TextButton(
                     onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        CupertinoPageRoute(
+                            builder: (context) => History()),
+                      );
                     },
                     child: Text(
                       'Orders',

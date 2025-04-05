@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class checkOut extends StatefulWidget {
 
 class _checkOutState extends State<checkOut> {
   bool isLogin = false;
+  FirebaseFirestore instance = FirebaseFirestore.instance;
 
   getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -155,6 +157,35 @@ class _checkOutState extends State<checkOut> {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (FirebaseAuth.instance.currentUser != null) {
+                                User? user = FirebaseAuth.instance.currentUser;
+
+                                await instance
+                                    .collection('users')
+                                    .doc(user!.uid)
+                                    .get()
+                                    .then((value) async {
+                                  List history = value.data()!['history'];
+                                  history.add(
+                                      {
+                                        'name': ItemData.buyData
+                                            .map((e) => {
+                                                  'name': e.name,
+                                                  'price': e.price,
+                                                  'quantity': e.numberOfItem,
+                                                  'image': e.image
+                                                })
+                                            .toList(),
+                                        'total': koygshtenrx(),
+                                        'date': DateTime.now(),
+                                      }
+                                    );
+                                  await instance
+                                      .collection('users')
+                                      .doc(user.uid)
+                                      .update({
+                                    'history': history
+                                  });
+                                });
                                 ItemData.buyData.clear();
                                 setState(() {});
                                 showDialog(
