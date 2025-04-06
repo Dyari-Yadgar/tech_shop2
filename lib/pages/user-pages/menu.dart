@@ -58,7 +58,7 @@ class _MenuState extends State<Menu> {
           children: [
             SizedBox(
               width: double.infinity,
-              height: size.height * 0.20,
+              height: size.height * 0.25,
               child: Image.asset('assets/images/logo.jpg'),
             ),
             SizedBox(

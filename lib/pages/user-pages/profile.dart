@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tech_shop/Auth/login.dart';
+import 'package:tech_shop/Auth/signup.dart';
 import 'package:tech_shop/pages/user-pages/profileedit.dart';
 import 'package:tech_shop/widgetstyle.dart';
 
@@ -50,27 +52,66 @@ class _ProfileState extends State<Profile> {
               ],
             ),
             body: FutureBuilder(
-              future: instance.collection('users').doc(user!.uid).get(),
+              future: user == null
+                  ? null
+                  : instance.collection('users').doc(user!.uid).get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.data == null) {
                   return Center(
-                      child: Text('User not found',
-                          style: TextStyle(fontSize: 18, color: Colors.red)));
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => Signup()),
+                              );
+                            },
+                            icon: Icon(Icons.login, color: Colors.white),
+                            label: Text("Sign Up",
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: WidgetStyle.primary,
+                            ),
+                          ),
+                          SizedBox(width: 16),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => Login()),
+                              );
+                            },
+                            icon: Icon(Icons.login, color: Colors.white),
+                            label: Text("Login",
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: WidgetStyle.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 }
 
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ListView(
                     children: [
-                      // Profile Icon with styling
                       Center(
                         child: FaIcon(
                           Icons.person,
-                          color: WidgetStyle.primary, // Custom primary color
-                          size: 100, // Bigger icon for better visibility
+                          color: WidgetStyle.primary,
+                          size: 100,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -88,52 +129,45 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10), 
+                          SizedBox(height: 10),
                           Container(
-                            width: MediaQuery.of(context).size.width *
-                                0.6, 
-                            height: 2, 
-                            color: WidgetStyle.primary, 
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            height: 2,
+                            color: WidgetStyle.primary,
                           ),
                           SizedBox(height: 20),
                         ],
-                      )
-
-                      ,
+                      ),
                       Center(
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height *
-                                0.02, 
-                            horizontal: MediaQuery.of(context).size.width *
-                                0.05, 
+                            vertical: MediaQuery.of(context).size.height * 0.02,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white, 
-                            borderRadius:
-                                BorderRadius.circular(10), 
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: WidgetStyle.primary, 
-                              width: 2, 
+                              color: WidgetStyle.primary,
+                              width: 2,
                             ),
                           ),
                           child: Row(
                             children: [
                               Icon(
                                 Icons.email,
-                                color: WidgetStyle
-                                    .primary,
-                                size: MediaQuery.of(context).size.width *
-                                    0.06, 
+                                color: WidgetStyle.primary,
+                                size: MediaQuery.of(context).size.width * 0.06,
                               ),
                               SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.04), 
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.04),
                               Text(
                                 '${snapshot.data!['email']}',
                                 style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.width *
-                                      0.05,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
                                   color: Colors.grey[700],
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -144,41 +178,36 @@ class _ProfileState extends State<Profile> {
                       ),
                       SizedBox(height: 10),
 
-                      // User Location
                       Center(
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height *
-                                0.02, 
-                            horizontal: MediaQuery.of(context).size.width *
-                                0.05, 
+                            vertical: MediaQuery.of(context).size.height * 0.02,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white, 
-                            borderRadius:
-                                BorderRadius.circular(10), 
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: WidgetStyle.primary, 
-                              width: 2, 
+                              color: WidgetStyle.primary,
+                              width: 2,
                             ),
                           ),
                           child: Row(
                             children: [
                               Icon(
                                 Icons.location_on,
-                                color: WidgetStyle
-                                    .primary, 
-                                size: MediaQuery.of(context).size.width *
-                                    0.06, 
+                                color: WidgetStyle.primary,
+                                size: MediaQuery.of(context).size.width * 0.06,
                               ),
                               SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.04), 
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.04),
                               Text(
                                 '${snapshot.data!['location']}',
                                 style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.width *
-                                      0.05, 
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
                                   color: Colors.grey[700],
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -189,41 +218,36 @@ class _ProfileState extends State<Profile> {
                       ),
                       SizedBox(height: 10),
 
-                    
                       Center(
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height *
-                                0.02,
-                            horizontal: MediaQuery.of(context).size.width *
-                                0.05,
+                            vertical: MediaQuery.of(context).size.height * 0.02,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white, 
-                            borderRadius:
-                                BorderRadius.circular(10), 
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: WidgetStyle.primary, 
-                              width: 2, 
+                              color: WidgetStyle.primary,
+                              width: 2,
                             ),
                           ),
                           child: Row(
                             children: [
                               Icon(
                                 Icons.phone,
-                                color: WidgetStyle
-                                    .primary, 
-                                size: MediaQuery.of(context).size.width *
-                                    0.06, 
+                                color: WidgetStyle.primary,
+                                size: MediaQuery.of(context).size.width * 0.06,
                               ),
                               SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.04),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.04),
                               Text(
                                 '${snapshot.data!['phone']}',
                                 style: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.width *
-                                      0.05, 
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
                                   color: Colors.grey[700],
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -234,7 +258,6 @@ class _ProfileState extends State<Profile> {
                       ),
                       SizedBox(height: 20),
 
-          
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50.0),
                         child: ElevatedButton(
@@ -246,11 +269,11 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           onPressed: () {
-                           Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => ProfEdit(),
-                          ));
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => ProfEdit(),
+                                ));
                           },
                           child: Text(
                             'Edit Profile',

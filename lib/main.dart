@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tech_shop/Auth/login.dart';
+import 'package:tech_shop/Auth/signup.dart';
 
 import 'package:tech_shop/WidgetStyle.dart';
+import 'package:tech_shop/pages/admin-pages/admindashboard.dart';
 import 'package:tech_shop/pages/admin-pages/adminmenu.dart';
 import 'package:tech_shop/pages/user-pages/checkOut.dart';
 
@@ -25,19 +29,126 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+FirebaseAuth instance = FirebaseAuth.instance;
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Tech Shop',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: BottomNavigation(),
+    return FutureBuilder<User?>(
+      future: Future.value(instance.currentUser),
+      builder: (context, snapshot) {
+      
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
+          );
+        }
+        if (snapshot.data == null) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Tech Shop',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
+            ),
+            home: BottomNavigation(),
+          );
+        }
+
+        // If user exists, check their role
+        return FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('users')
+              .doc(snapshot.data!.uid)
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return MaterialApp(
+                home: Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                ),
+              );
+            }
+
+            if (snapshot.hasError ||
+                !snapshot.hasData ||
+                !snapshot.data!.exists) {
+              return MaterialApp(
+                home: Scaffold(
+                  body: Center(
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "You need to log in to continue",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => Login()),
+                                  );
+                                },
+                                icon: Icon(Icons.login),
+                                label: Text("Login"),
+                                style: ElevatedButton.styleFrom(
+                                  iconColor: WidgetStyle.primary,
+                                  textStyle: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => Signup()),
+                                  );
+                                },
+                                icon: Icon(Icons.app_registration),
+                                label: Text("Signup"),
+                                style: ElevatedButton.styleFrom(
+                                  textStyle: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            final data = snapshot.data!.data() as Map<String, dynamic>;
+            final role = data['role'];
+
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Tech Shop',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              home: role == 'admin' ? AdminDashboard() : BottomNavigation(),
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -58,7 +169,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Remove default back button if any
+        automaticallyImplyLeading: false, 
         centerTitle: true,
         title: Text(
           'Tech Shop',
@@ -85,7 +196,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           child: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('users')
-                .doc(FirebaseAuth.instance.currentUser?.uid)
+                .doc(instance.currentUser?.uid)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -96,22 +207,20 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 return Center(child: Text('Error: ${snapshot.error}'));
               }
 
-             
               if (!snapshot.hasData || !snapshot.data!.exists) {
-                return Menu(); 
+                return Menu();
               }
 
               var userRole = snapshot.data!.get('role');
 
-              
               if (userRole == null) {
-                return Menu(); 
+                return Menu();
               }
 
               if (userRole == 'admin') {
-                return AdminMenu(); 
+                return AdminMenu();
               } else {
-                return Menu(); 
+                return Menu();
               }
             },
           )),

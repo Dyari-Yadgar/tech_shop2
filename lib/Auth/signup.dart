@@ -179,7 +179,7 @@ class _SignupState extends State<Signup> {
             children: [
               SizedBox(
                   width: double.infinity,
-                  height: size.height * 0.20,
+                  height: size.height * 0.2,
                   child: Image.asset('assets/images/logo.jpg')),
               SizedBox(height: 10),
               SizedBox(

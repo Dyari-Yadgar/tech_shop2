@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_shop/main.dart';
-import 'package:tech_shop/pages/user-pages/aboutapp.dart';
-import 'package:tech_shop/pages/user-pages/aboutus.dart';
 import 'package:tech_shop/pages/user-pages/history.dart';
 import 'package:tech_shop/pages/user-pages/pcbuild.dart';
 import 'package:tech_shop/pages/user-pages/profile.dart';

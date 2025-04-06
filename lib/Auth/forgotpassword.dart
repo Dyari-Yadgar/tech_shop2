@@ -40,7 +40,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: size.height * 0.20,
+                height: size.height * 0.40,
                 child: Image.asset('assets/images/logo.jpg'),
               ),
               SizedBox(
@@ -101,7 +101,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     onPressed: () {
                                       setState(() {});
                                       Navigator.of(context).pop();
-                                      Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => Login(),));
+                                      Navigator.pushReplacement(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) => Login(),
+                                          ));
                                     },
                                     child: Text("OK"),
                                   ),

@@ -7,6 +7,7 @@ import 'package:tech_shop/main.dart';
 import 'package:tech_shop/WidgetStyle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tech_shop/Auth/forgotpassword.dart';
+import 'package:tech_shop/pages/admin-pages/admindashboard.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -92,7 +93,7 @@ class _LoginState extends State<Login> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: size.height * 0.20,
+                height: size.height * 0.30,
                 child: Image.asset('assets/images/logo.jpg'),
               ),
               SizedBox(
@@ -180,19 +181,39 @@ class _LoginState extends State<Login> {
                                     email: emailController.text,
                                     password: passController.text,
                                   )
-                                      .then((value) {
+                                      .then((value) async {
                                     if (FirebaseAuth
                                         .instance.currentUser!.emailVerified) {
-                                      Navigator.pushReplacement(
+                                      final uid = FirebaseAuth
+                                          .instance.currentUser!.uid;
+                                      final userDoc = await FirebaseFirestore
+                                          .instance
+                                          .collection('users')
+                                          .doc(uid)
+                                          .get();
+
+                                      final role = userDoc.data()?['role'];
+
+                                      if (role == 'admin') {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          CupertinoPageRoute(
+                                            builder: (context) =>
+                                                AdminDashboard(),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.pushReplacement(
                                           context,
                                           CupertinoPageRoute(
                                             builder: (context) =>
                                                 BottomNavigation(),
-                                          ));
+                                          ),
+                                        );
+                                      }
                                     } else {
                                       FirebaseAuth.instance.signOut;
                                       showDialog(
-                                        // ignore: use_build_context_synchronously
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
@@ -203,10 +224,9 @@ class _LoginState extends State<Login> {
                                               TextButton(
                                                 onPressed: () {
                                                   setState(() {});
-                                                  Navigator.of(context)
-                                                      .pop(); // Close the dialog
+                                                  Navigator.of(context).pop();
                                                   FirebaseAuth.instance
-                                                      .signOut(); // Sign out after closing the dialog
+                                                      .signOut();
                                                 },
                                                 child: Text("OK"),
                                               ),
