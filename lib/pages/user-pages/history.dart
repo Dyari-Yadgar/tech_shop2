@@ -62,7 +62,7 @@ class _HistoryState extends State<History> {
               List history = data['history'];
 
               if (history.isEmpty) {
-                return Text('No data available');
+                return Center(child: Text('No data available'));
               }
 
               return ListView.builder(
