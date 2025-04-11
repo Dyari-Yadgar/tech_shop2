@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tech_shop/Auth/login.dart';
+import 'package:tech_shop/Auth/signup.dart';
 import 'package:tech_shop/main.dart';
 import 'package:tech_shop/pages/user-pages/aboutapp.dart';
 import 'package:tech_shop/pages/user-pages/aboutus.dart';
@@ -18,6 +21,44 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  Future<bool> checkUserExists() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+    return doc.exists;
+  }
+
+  void showLoginSignupDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("First you need to log in or sign up"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (_) => Login()));
+            },
+            child: Text(
+              "Login",
+              style: TextStyle(color: WidgetStyle.primary),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (_) => Signup()));
+            },
+            child: Text("Signup", style: TextStyle(color: WidgetStyle.primary)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -35,219 +76,101 @@ class _MenuState extends State<Menu> {
           centerTitle: true,
           title: Text(
             'Tech Shop',
-            style: TextStyle(
-              color: WidgetStyle.white,
-            ),
+            style: TextStyle(color: WidgetStyle.white),
           ),
           backgroundColor: WidgetStyle.primary,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
           ),
-          actions: [
-            SizedBox(
-              width: 40,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-          ],
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: double.infinity,
-              height: size.height * 0.25,
-              child: Image.asset('assets/images/logo.jpg'),
+                width: double.infinity,
+                height: size.height * 0.25,
+                child: Image.asset('assets/images/logo.jpg')),
+            menuItem(
+              icon: Icons.settings,
+              label: 'Profile Settings',
+              onTap: () async {
+                if (await checkUserExists()) {
+                  Navigator.push(
+                      context, CupertinoPageRoute(builder: (_) => Profile()));
+                } else {
+                  showLoginSignupDialog();
+                }
+              },
             ),
-            SizedBox(
-              height: 5,
+            menuItem(
+              icon: FontAwesomeIcons.computer,
+              label: 'Custom Pc Build',
+              onTap: () {
+                Navigator.push(
+                    context, CupertinoPageRoute(builder: (_) => PcBuild()));
+              },
             ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Profile(),
-                          ));
-                    },
-                    icon: Icon(
-                      Icons.settings,
-                      color: WidgetStyle.primary,
-                      size: 20,
-                    )),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Profile(),
-                          ));
-                    },
-                    child: Text(
-                      'Profile Settings',
-                      style:
-                          TextStyle(color: WidgetStyle.primary, fontSize: 18),
-                    )),
-              ],
+            menuItem(
+              icon: FontAwesomeIcons.history,
+              label: 'Order History',
+              onTap: () async {
+                if (await checkUserExists()) {
+                  Navigator.push(
+                      context, CupertinoPageRoute(builder: (_) => History()));
+                } else {
+                  showLoginSignupDialog();
+                }
+              },
             ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => PcBuild(),
-                          ));
-                    },
-                    icon: FaIcon(
-                      FontAwesomeIcons.computer,
-                      color: WidgetStyle.primary,
-                      size: 20,
-                    )),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => PcBuild(),
-                          ));
-                    },
-                    child: Text(
-                      'Custom Pc Build',
-                      style:
-                          TextStyle(color: WidgetStyle.primary, fontSize: 18),
-                    )),
-              ],
+            menuItem(
+              icon: FontAwesomeIcons.circleInfo,
+              label: 'About Us',
+              onTap: () {
+                Navigator.push(
+                    context, CupertinoPageRoute(builder: (_) => AboutUs()));
+              },
             ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => History(),
-                          ));
-                    },
-                    icon: FaIcon(
-                      FontAwesomeIcons.history,
-                      color: WidgetStyle.primary,
-                      size: 20,
-                    )),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => History(),
-                          ));
-                    },
-                    child: Text(
-                      'Order History',
-                      style:
-                          TextStyle(color: WidgetStyle.primary, fontSize: 18),
-                    )),
-              ],
+            menuItem(
+              icon: FontAwesomeIcons.info,
+              label: 'About Application',
+              onTap: () {
+                Navigator.push(
+                    context, CupertinoPageRoute(builder: (_) => AboutApp()));
+              },
             ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => AboutUs(),
-                          ));
-                    },
-                    icon: FaIcon(
-                      FontAwesomeIcons.circleInfo,
-                      color: WidgetStyle.primary,
-                      size: 20,
-                    )),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => AboutUs(),
-                          ));
-                    },
-                    child: Text(
-                      'About Us',
-                      style:
-                          TextStyle(color: WidgetStyle.primary, fontSize: 18),
-                    )),
-              ],
+            menuItem(
+              icon: Icons.logout,
+              label: 'Logout',
+              onTap: () async {
+                if (FirebaseAuth.instance.currentUser != null) {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacement(
+                      CupertinoPageRoute(builder: (_) => BottomNavigation()));
+                }
+              },
             ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => AboutApp(),
-                          ));
-                    },
-                    icon: FaIcon(
-                      FontAwesomeIcons.info,
-                      color: WidgetStyle.primary,
-                      size: 20,
-                    )),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => AboutApp(),
-                          ));
-                    },
-                    child: Text(
-                      'About Application',
-                      style:
-                          TextStyle(color: WidgetStyle.primary, fontSize: 18),
-                    )),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushReplacement(
-                      CupertinoPageRoute(
-                          builder: (context) => BottomNavigation()),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.logout,
-                    color: WidgetStyle.primary,
-                  ),
-                ),
-                TextButton(
-                    onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pushReplacement(
-                        CupertinoPageRoute(
-                            builder: (context) => BottomNavigation()),
-                      );
-                    },
-                    child: Text(
-                      'Logout',
-                      style:
-                          TextStyle(color: WidgetStyle.primary, fontSize: 18),
-                    )),
-              ],
-            )
           ],
         ),
       ),
     );
   }
 
+  Widget menuItem(
+      {required IconData icon,
+      required String label,
+      required VoidCallback onTap}) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(icon, color: WidgetStyle.primary, size: 20),
+          onPressed: onTap,
+        ),
+        TextButton(
+          onPressed: onTap,
+          child: Text(label,
+              style: TextStyle(color: WidgetStyle.primary, fontSize: 18)),
+        ),
+      ],
+    );
+  }
 }

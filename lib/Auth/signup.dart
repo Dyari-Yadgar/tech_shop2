@@ -29,7 +29,7 @@ class _SignupState extends State<Signup> {
 
   GlobalKey<FormFieldState<String>> emailValid = GlobalKey();
   GlobalKey<FormFieldState<String>> passValid = GlobalKey();
-   GlobalKey<FormFieldState<String>> phoneValid = GlobalKey();
+  GlobalKey<FormFieldState<String>> phoneValid = GlobalKey();
 
   Future<void> signInWithGoogle() async {
     setState(() {
@@ -56,6 +56,9 @@ class _SignupState extends State<Signup> {
     final docSnapshot = await userDoc.get();
 
     if (!docSnapshot.exists) {
+      // Generate a unique user ID as an integer
+      int newUserId = await generateUserId();
+
       await userDoc.set({
         'name': user.displayName ?? '',
         'email': user.email,
@@ -64,6 +67,7 @@ class _SignupState extends State<Signup> {
         'history': [],
         'favorites': [],
         'role': 'user',
+        'id': newUserId, // Store the generated ID
       });
     }
 
@@ -74,7 +78,7 @@ class _SignupState extends State<Signup> {
 
   Future<void> createAccountWithEmail() async {
     if (emailValid.currentState!.validate() &&
-        passValid.currentState!.validate() && 
+        passValid.currentState!.validate() &&
         !isSignup) {
       try {
         setState(() {
@@ -92,6 +96,9 @@ class _SignupState extends State<Signup> {
 
         await user.updateDisplayName(userNameController.text);
 
+        // Generate a unique user ID as an integer
+        int newUserId = await generateUserId();
+
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'name': userNameController.text ?? '',
           'email': user.email,
@@ -100,6 +107,7 @@ class _SignupState extends State<Signup> {
           'history': [],
           'favorites': [],
           'role': 'user',
+          'id': newUserId, // Store the generated ID
         });
 
         await user.sendEmailVerification();
@@ -148,8 +156,19 @@ class _SignupState extends State<Signup> {
           ),
         );
       } catch (e) {
-        print("Error during account creation: $e");
+        print("error la drwsktrdni account haya$e");
       }
+    }
+  }
+
+  Future<int> generateUserId() async {
+    try {
+      final usersSnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
+      return usersSnapshot.size + 1;
+    } catch (e) {
+      print("Error generating user ID: $e");
+      return 1; // fallback
     }
   }
 

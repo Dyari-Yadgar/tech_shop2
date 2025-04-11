@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_shop/main.dart';
+import 'package:tech_shop/pages/admin-pages/itemsettings.dart';
+import 'package:tech_shop/pages/admin-pages/usersetting.dart';
 import 'package:tech_shop/pages/user-pages/history.dart';
 import 'package:tech_shop/pages/user-pages/pcbuild.dart';
 import 'package:tech_shop/pages/user-pages/profile.dart';
@@ -23,7 +25,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
       child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-
             centerTitle: true,
             title: Text(
               'Tech Shop',
@@ -105,7 +106,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
@@ -122,19 +122,33 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ),
                       child: Row(
                         children: [
-                          FaIcon(
-                            FontAwesomeIcons.users,
-                            color: Colors.white,
-                            size: 20,
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => UserSettings()),
+                              );
+                            },
+                            icon: FaIcon(
+                              FontAwesomeIcons.users,
+                              color: Colors.white,
+                            ),
                           ),
                           SizedBox(width: 8),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => UserSettings()),
+                              );
+                            },
                             style: TextButton.styleFrom(
                               iconColor: Colors.white,
                             ),
                             child: Text(
-                              'Users Settings',
+                              'Users',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.white),
                             ),
@@ -169,11 +183,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           SizedBox(width: 8),
                           TextButton(
                             onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   CupertinoPageRoute(
-                              //       builder: (context) => PcBuild()),
-                              // );
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => ItemSettings()),
+                              );
                             },
                             style: TextButton.styleFrom(
                               iconColor: Colors.white,

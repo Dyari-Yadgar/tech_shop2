@@ -39,23 +39,23 @@ class MyApp extends StatelessWidget {
     return FutureBuilder<User?>(
       future: Future.value(instance.currentUser),
       builder: (context, snapshot) {
-      
         if (snapshot.connectionState == ConnectionState.waiting) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: Scaffold(
               body: Center(child: CircularProgressIndicator()),
             ),
           );
         }
+
         if (snapshot.data == null) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Tech Shop',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
+            home: SafeArea(
+              child: Scaffold(
+                body: BottomNavigation(),
+              ),
             ),
-            home: BottomNavigation(),
           );
         }
 
@@ -68,17 +68,31 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return MaterialApp(
-                home: Scaffold(
-                  body: Center(child: CircularProgressIndicator()),
+                debugShowCheckedModeBanner: false,
+                home: SafeArea(
+                  child: Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  ),
                 ),
               );
             }
 
+            if (!snapshot.data!.exists) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: SafeArea(
+                  child: Scaffold(
+                    body: BottomNavigation(),
+                  ),
+                ),
+              );
+            }
             if (snapshot.hasError ||
                 !snapshot.hasData ||
                 !snapshot.data!.exists) {
               return MaterialApp(
-                home: Scaffold(
+                  home: SafeArea(
+                child: Scaffold(
                   body: Center(
                     child: Container(
                       padding: EdgeInsets.all(20),
@@ -131,7 +145,7 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
                 ),
-              );
+              ));
             }
 
             final data = snapshot.data!.data() as Map<String, dynamic>;
@@ -169,7 +183,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, 
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
           'Tech Shop',
