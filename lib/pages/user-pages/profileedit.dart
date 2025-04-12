@@ -19,7 +19,7 @@ class _ProfEditState extends State<ProfEdit> {
   final TextEditingController locationController = TextEditingController();
   GlobalKey<FormFieldState<String>> emailValid = GlobalKey();
   FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore instance = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,36 +74,9 @@ class _ProfEditState extends State<ProfEdit> {
                 focusedErrorBorder: Border(),
               ),
             ),
-            SizedBox(height: 30), // Space before the button
-
-            // Email TextField
-            TextFormField(
-              controller: emailController,
-              validator: (value) {
-                return value != null &&
-                        (!value.contains('@') ||
-                            value[0] == '@' ||
-                            value[value.length - 1] == '@')
-                    ? 'Wrong email address'
-                    : null;
-              },
-              key: emailValid,
-              decoration: InputDecoration(
-                hintText: 'Email',
-                suffix: Icon(
-                  Icons.email,
-                  color: WidgetStyle.primary,
-                ),
-                focusedBorder: Border(),
-                enabledBorder: Border(),
-                errorBorder: Border(),
-                disabledBorder: Border(),
-                focusedErrorBorder: Border(),
-              ),
-            ),
             SizedBox(height: 20),
 
-            // Name TextField
+          
             TextField(
               controller: locationController,
               decoration: InputDecoration(
@@ -142,40 +115,87 @@ class _ProfEditState extends State<ProfEdit> {
             SizedBox(height: 20),
 
             Center(
-              child: ElevatedButton(
+              child: TextButton(
                 onPressed: () async {
                   final String newName = nameController.text.trim();
+                  final String newLocation = locationController.text.trim();
+                  final String newPhone = phoneController.text.trim();
                   final String uid = auth.currentUser!.uid;
 
-                  if (newName.isNotEmpty) {
-                    try {
-                      await firestore.collection('users').doc(uid).update({
-                        'name': newName,
-                      });
+                  if (newName.isEmpty &&
+                      newLocation.isEmpty &&
+                      newPhone.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: const Text(
+                              "enter one field to update, or go back"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("OK"),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                    return;
+                  }
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Name updated successfully!')),
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to update name: $e')),
-                      );
-                    }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please enter a valid name.')),
+                  Map<String, dynamic> updatedData = {};
+
+                  if (newName.isNotEmpty) updatedData['name'] = newName;
+                  if (newLocation.isNotEmpty)
+                    updatedData['location'] = newLocation;
+                  if (newPhone.isNotEmpty) updatedData['phone'] = newPhone;
+
+                  try {
+                    await instance
+                        .collection('users')
+                        .doc(uid)
+                        .update(updatedData);
+
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: const Text("Profile updated successfully!"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("OK"),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  } catch (e) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text("failed to update profile: $e"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("OK"),
+                            )
+                          ],
+                        );
+                      },
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: WidgetStyle.primary,
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                 ),
                 child: Text(
                   'Edit',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ),

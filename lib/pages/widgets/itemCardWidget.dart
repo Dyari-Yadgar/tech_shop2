@@ -38,7 +38,9 @@ class _ItemCardWidgetState extends State<ItemCardWidget> {
                 child: Column(
               children: [
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.close))
+                  IconButton(onPressed: () {
+                    // remove krdni item 
+                  }, icon: const Icon(Icons.close))
                 ]),
                 Text(widget.item.name),
                 Text('price : \$${widget.item.price * widget.item.numberOfItem}'),
@@ -46,7 +48,7 @@ class _ItemCardWidgetState extends State<ItemCardWidget> {
                   height: 35,
                   width: 140,
                   decoration: BoxDecoration(
-                      color: WidgetStyle.yellow,
+                      color: WidgetStyle.primary,
                       borderRadius: BorderRadius.circular(13)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

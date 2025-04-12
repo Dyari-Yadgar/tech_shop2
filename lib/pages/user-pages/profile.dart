@@ -262,10 +262,10 @@ class _ProfileState extends State<Profile> {
                         padding: const EdgeInsets.symmetric(horizontal: 50.0),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            iconColor: WidgetStyle.primary,
-                            padding: EdgeInsets.symmetric(vertical: 15),
+                            backgroundColor: WidgetStyle.primary,
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
                           onPressed: () {
@@ -280,8 +280,8 @@ class _ProfileState extends State<Profile> {
                             style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: WidgetStyle.primary,
-                                backgroundColor: Colors.white),
+                                color: Colors.white,
+                                ),
                           ),
                         ),
                       ),

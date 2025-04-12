@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tech_shop/Data/ItemData.dart';
 import 'package:tech_shop/model/buyItemModel.dart';
 import 'package:tech_shop/model/itemmodel.dart';
@@ -140,23 +141,20 @@ class _ItemViewState extends State<ItemView> {
             children: [
               Row(
                 children: [
-                  Text('${widget.item.price}',
-                      style: const TextStyle(fontSize: 18)),
-                  const SizedBox(
-                    width: 5,
-                  ),
                   Container(
                     padding: const EdgeInsets.all(1),
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [WidgetStyle.second, WidgetStyle.primary],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter),
+                        color: WidgetStyle.primary,
                         borderRadius: BorderRadius.circular(7)),
                     child: Icon(
                       Icons.attach_money_rounded,
                       color: WidgetStyle.white,
                     ),
+                  ),
+                  Text('${widget.item.price}',
+                      style: const TextStyle(fontSize: 18)),
+                  const SizedBox(
+                    width: 5,
                   ),
                 ],
               ),
@@ -165,23 +163,20 @@ class _ItemViewState extends State<ItemView> {
               ),
               Row(
                 children: [
-                  Text('${widget.item.price * numberOfItem}\$',
-                      style: const TextStyle(fontSize: 18)),
-                  const SizedBox(
-                    width: 5,
-                  ),
                   Container(
                     padding: const EdgeInsets.all(1),
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [WidgetStyle.second, WidgetStyle.primary],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter),
+                        color: WidgetStyle.primary,
                         borderRadius: BorderRadius.circular(7)),
-                    child: Icon(
-                      Icons.money_rounded,
+                    child: FaIcon(
+                      Icons.money,
                       color: WidgetStyle.white,
                     ),
+                  ),
+                  Text('${widget.item.price * numberOfItem}',
+                      style: const TextStyle(fontSize: 18)),
+                  const SizedBox(
+                    width: 5,
                   ),
                 ],
               )
@@ -194,18 +189,41 @@ class _ItemViewState extends State<ItemView> {
         const SizedBox(
           height: 30,
         ),
-        Row(
+        Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(
-              widget.item.sharika,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              // rekrdnaway wshakan
-              textAlign: TextAlign.end,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.circleInfo,
+                    size: 20,
+                    color: WidgetStyle.primary,
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      widget.item.spec,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        letterSpacing: 0.5,
+                      ),
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
-              width: 35,
-            )
+              height: 8,
+            ),
           ],
         ),
 
@@ -222,7 +240,7 @@ class _ItemViewState extends State<ItemView> {
                 height: 40,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        colors: [const Color(0XffABA6E3), WidgetStyle.primary],
+                        colors: [const Color(0xFF194a7a), WidgetStyle.primary],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter),
                     boxShadow: [
@@ -237,7 +255,7 @@ class _ItemViewState extends State<ItemView> {
                     onPressed: () async {
                       setState(() {
                         if (!isfavorite) {
-                          ItemData.favorites.add(widget.item.id);
+                          // ItemData.favorites.add(widget.item.id);
                           User? user = FirebaseAuth.instance.currentUser;
                           if (user != null) {
                             // Add item to the Firestore user's favorites array
@@ -294,7 +312,7 @@ class _ItemViewState extends State<ItemView> {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [const Color(0XffABA6E3), WidgetStyle.primary],
+                        colors: [const Color(0xFF194a7a), WidgetStyle.primary],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
@@ -335,7 +353,7 @@ class _ItemViewState extends State<ItemView> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12))),
                     child: const Text(
-                      'Buy',
+                      'Add to card',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),

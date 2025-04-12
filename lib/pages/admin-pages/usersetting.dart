@@ -102,8 +102,11 @@ class _UserSettingsState extends State<UserSettings> {
                       }
 
                       final allUsers = snapshot.data!.docs;
-                      
+
                       final filteredUsers = allUsers.where((user) {
+                        final role = user['role'] ?? 'user';
+                        if (role == 'admin') return false; // Exclude admins
+
                         final name =
                             (user['name'] ?? '').toString().toLowerCase();
                         final phone =
@@ -149,8 +152,7 @@ class _UserSettingsState extends State<UserSettings> {
                                 subtitle: Row(
                                   children: [
                                     Icon(Icons.phone,
-                                        size: 16,
-                                        color: WidgetStyle.primary),
+                                        size: 16, color: WidgetStyle.primary),
                                     const SizedBox(width: 4),
                                     Text(phone),
                                   ],

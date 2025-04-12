@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tech_shop/Auth/login.dart';
 import 'package:tech_shop/Data/ItemData.dart';
@@ -73,10 +74,10 @@ class _checkOutState extends State<checkOut> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Define Yout Location',
+                                    'Your current Location',
                                     style: TextStyle(fontSize: 17),
                                   ),
                                 ],
@@ -84,12 +85,50 @@ class _checkOutState extends State<checkOut> {
                               SizedBox(height: 10),
                               Row(
                                 children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    size: 25,
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        size: 25,
+                                        color: WidgetStyle.primary,
+                                      ),
+                                      FutureBuilder<DocumentSnapshot>(
+                                        future: FirebaseAuth
+                                                    .instance.currentUser !=
+                                                null
+                                            ? FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                                .get()
+                                            : Future.value(null),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData ||
+                                              snapshot.data == null) {
+                                            return Text(
+                                              ' ',
+                                              style: TextStyle(fontSize: 17),
+                                            );
+                                          }
+
+                                          final data = snapshot.data!.data()
+                                              as Map<String, dynamic>?;
+                                          final location = data?['location'];
+
+                                          return Text(
+                                            location != null &&
+                                                    location
+                                                        .toString()
+                                                        .trim()
+                                                        .isNotEmpty
+                                                ? location
+                                                : ' ',
+                                            style: TextStyle(fontSize: 17),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                  Text('sulaymaniah, Salm street',
-                                      style: TextStyle(fontSize: 17))
                                 ],
                               )
                             ],
@@ -113,14 +152,24 @@ class _checkOutState extends State<checkOut> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    '${koygshtenrx() + 5} \$',
-                                    style: const TextStyle(fontSize: 17),
-                                  ),
-                                  const Expanded(child: SizedBox()),
                                   const Text(
                                     'Total ',
                                     style: TextStyle(fontSize: 17),
+                                  ),
+                                  const Expanded(child: SizedBox()),
+                                  Container(
+                                    padding: const EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                        color: WidgetStyle.primary,
+                                        borderRadius: BorderRadius.circular(7)),
+                                    child: FaIcon(
+                                      Icons.money,
+                                      color: WidgetStyle.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${koygshtenrx() + 5} ',
+                                    style: const TextStyle(fontSize: 17),
                                   ),
                                 ],
                               ),
@@ -139,7 +188,7 @@ class _checkOutState extends State<checkOut> {
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  const Color(0XffABA6E3),
+                                  const Color(0xFF194a7a),
                                   WidgetStyle.primary
                                 ],
                                 begin: Alignment.topCenter,
@@ -165,26 +214,22 @@ class _checkOutState extends State<checkOut> {
                                     .get()
                                     .then((value) async {
                                   List history = value.data()!['history'];
-                                  history.add(
-                                      {
-                                        'name': ItemData.buyData
-                                            .map((e) => {
-                                                  'name': e.name,
-                                                  'price': e.price,
-                                                  'quantity': e.numberOfItem,
-                                                  'image': e.image
-                                                })
-                                            .toList(),
-                                        'total': koygshtenrx(),
-                                        'date': DateTime.now(),
-                                      }
-                                    );
+                                  history.add({
+                                    'name': ItemData.buyData
+                                        .map((e) => {
+                                              'name': e.name,
+                                              'price': e.price,
+                                              'quantity': e.numberOfItem,
+                                              'image': e.image
+                                            })
+                                        .toList(),
+                                    'total': koygshtenrx(),
+                                    'date': DateTime.now(),
+                                  });
                                   await instance
                                       .collection('users')
                                       .doc(user.uid)
-                                      .update({
-                                    'history': history
-                                  });
+                                      .update({'history': history});
                                 });
                                 ItemData.buyData.clear();
                                 setState(() {});
@@ -368,8 +413,10 @@ class _checkOutState extends State<checkOut> {
                             ),
                             child: const Text(
                               'Buy',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                         ))

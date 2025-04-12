@@ -26,17 +26,12 @@ class ItemData {
     }),
   ];
 
-  static List<String> favorites = [];
+  static List<int> favorites = [];
 
-  static bool checkItemFavorite(itemModel item) {
-    bool r = false;
-    favorites.forEach((element) {
-      if (element == item.id) {
-        r = true;
-      }
-    });
-    return r;
-  }
+static bool checkItemFavorite(itemModel item) {
+  return favorites.contains(item.id);
+}
+
 
   static List<String> sharikaNames() {
     List<String> names = [];

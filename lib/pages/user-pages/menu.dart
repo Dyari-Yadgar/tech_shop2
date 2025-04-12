@@ -90,64 +90,179 @@ class _MenuState extends State<Menu> {
                 width: double.infinity,
                 height: size.height * 0.25,
                 child: Image.asset('assets/images/logo.jpg')),
-            menuItem(
-              icon: Icons.settings,
-              label: 'Profile Settings',
-              onTap: () async {
-                if (await checkUserExists()) {
-                  Navigator.push(
-                      context, CupertinoPageRoute(builder: (_) => Profile()));
-                } else {
-                  showLoginSignupDialog();
-                }
-              },
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.settings,
+                        color: WidgetStyle.primary, size: 20),
+                    onPressed: () async {
+                      if (await checkUserExists()) {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (_) => Profile()));
+                      } else {
+                        showLoginSignupDialog();
+                      }
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      if (await checkUserExists()) {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (_) => Profile()));
+                      } else {
+                        showLoginSignupDialog();
+                      }
+                    },
+                    child: Text('Profile Settings',
+                        style: TextStyle(
+                            color: WidgetStyle.primary, fontSize: 18)),
+                  ),
+                ],
+              ),
             ),
-            menuItem(
-              icon: FontAwesomeIcons.computer,
-              label: 'Custom Pc Build',
-              onTap: () {
-                Navigator.push(
-                    context, CupertinoPageRoute(builder: (_) => PcBuild()));
-              },
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(FontAwesomeIcons.computer,
+                        color: WidgetStyle.primary, size: 20),
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_) => PcBuild()));
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_) => PcBuild()));
+                    },
+                    child: Text('Custom Pc Build',
+                        style: TextStyle(
+                            color: WidgetStyle.primary, fontSize: 18)),
+                  ),
+                ],
+              ),
             ),
-            menuItem(
-              icon: FontAwesomeIcons.history,
-              label: 'Order History',
-              onTap: () async {
-                if (await checkUserExists()) {
-                  Navigator.push(
-                      context, CupertinoPageRoute(builder: (_) => History()));
-                } else {
-                  showLoginSignupDialog();
-                }
-              },
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(FontAwesomeIcons.history,
+                        color: WidgetStyle.primary, size: 20),
+                    onPressed: () async {
+                      if (await checkUserExists()) {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (_) => History()));
+                      } else {
+                        showLoginSignupDialog();
+                      }
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      if (await checkUserExists()) {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (_) => History()));
+                      } else {
+                        showLoginSignupDialog();
+                      }
+                    },
+                    child: Text('Order History',
+                        style: TextStyle(
+                            color: WidgetStyle.primary, fontSize: 18)),
+                  ),
+                ],
+              ),
             ),
-            menuItem(
-              icon: FontAwesomeIcons.circleInfo,
-              label: 'About Us',
-              onTap: () {
-                Navigator.push(
-                    context, CupertinoPageRoute(builder: (_) => AboutUs()));
-              },
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(FontAwesomeIcons.circleInfo,
+                        color: WidgetStyle.primary, size: 20),
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_) => AboutUs()));
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_) => AboutUs()));
+                    },
+                    child: Text('About Us',
+                        style: TextStyle(
+                            color: WidgetStyle.primary, fontSize: 18)),
+                  ),
+                ],
+              ),
             ),
-            menuItem(
-              icon: FontAwesomeIcons.info,
-              label: 'About Application',
-              onTap: () {
-                Navigator.push(
-                    context, CupertinoPageRoute(builder: (_) => AboutApp()));
-              },
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(FontAwesomeIcons.info,
+                        color: WidgetStyle.primary, size: 20),
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_) => AboutApp()));
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (_) => AboutApp()));
+                    },
+                    child: Text('About Application',
+                        style: TextStyle(
+                            color: WidgetStyle.primary, fontSize: 18)),
+                  ),
+                ],
+              ),
             ),
-            menuItem(
-              icon: Icons.logout,
-              label: 'Logout',
-              onTap: () async {
-                if (FirebaseAuth.instance.currentUser != null) {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pushReplacement(
-                      CupertinoPageRoute(builder: (_) => BottomNavigation()));
-                }
-              },
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.logout,
+                        color: WidgetStyle.primary, size: 20),
+                    onPressed: () async {
+                      if (FirebaseAuth.instance.currentUser != null) {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.of(context).pushReplacement(
+                            CupertinoPageRoute(
+                                builder: (_) => BottomNavigation()));
+                      }
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      if (FirebaseAuth.instance.currentUser != null) {
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.of(context).pushReplacement(
+                            CupertinoPageRoute(
+                                builder: (_) => BottomNavigation()));
+                      }
+                    },
+                    child: Text('Logout',
+                        style: TextStyle(
+                            color: WidgetStyle.primary, fontSize: 18)),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -6,7 +6,6 @@ import 'package:tech_shop/model/buyItemModel.dart';
 import 'package:tech_shop/pages/widgets/itemCardWidget.dart';
 import 'package:tech_shop/WidgetStyle.dart';
 
-
 class Buy extends StatefulWidget {
   final changenumberofitem;
   final buyItemModel item;
@@ -39,17 +38,33 @@ class _BuyState extends State<Buy> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Tech Shop',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
           ),
           centerTitle: true,
+          title: Text(
+            'Tech Shop',
+            style: TextStyle(
+              color: WidgetStyle.white,
+            ),
+          ),
           backgroundColor: WidgetStyle.primary,
-          // border radius la appbar
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(35))),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          ),
+          actions: [
+            SizedBox(
+              width: 40,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -87,15 +102,15 @@ class _BuyState extends State<Buy> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              '${koygshtekalakan()}',
-                              style: const TextStyle(fontSize: 17),
-                            ),
-                            const Expanded(child: SizedBox()),
                             const Text(
                               'Total Items',
                               style: TextStyle(fontSize: 17),
                             ),
+                            const Expanded(child: SizedBox()),
+                            Text(
+                              '${koygshtekalakan()}',
+                              style: const TextStyle(fontSize: 17),
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -112,15 +127,26 @@ class _BuyState extends State<Buy> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              '${koygshtenrx()}',
-                              style: const TextStyle(fontSize: 17),
-                            ),
-                            const Expanded(child: SizedBox()),
                             const Text(
                               'Total Amount',
                               style: TextStyle(fontSize: 17),
                             ),
+                            const Expanded(child: SizedBox()),
+                            Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                  color: WidgetStyle.primary,
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Icon(
+                                size: 15,
+                                Icons.attach_money_rounded,
+                                color: WidgetStyle.white,
+                              ),
+                            ),
+                            Text(
+                              '${koygshtenrx()}',
+                              style: const TextStyle(fontSize: 17),
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -134,16 +160,27 @@ class _BuyState extends State<Buy> {
                         const SizedBox(
                           height: 10,
                         ),
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              '5 \$',
+                            const Text(
+                              'Delivery fee',
                               style: TextStyle(fontSize: 17),
                             ),
-                            Expanded(child: SizedBox()),
-                            Text(
-                              'Delivery fee',
+                            const Expanded(child: SizedBox()),
+                            Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                  color: WidgetStyle.primary,
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Icon(
+                                size: 15,
+                                Icons.attach_money_rounded,
+                                color: WidgetStyle.white,
+                              ),
+                            ),
+                            const Text(
+                              '5',
                               style: TextStyle(fontSize: 17),
                             ),
                           ],
@@ -162,14 +199,25 @@ class _BuyState extends State<Buy> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              '${koygshtenrx() + 5} \$',
-                              style: const TextStyle(fontSize: 17),
-                            ),
-                            const Expanded(child: SizedBox()),
                             const Text(
                               'Total Amount ',
                               style: TextStyle(fontSize: 17),
+                            ),
+                            const Expanded(child: SizedBox()),
+                            Container(
+                              padding: const EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                  color: WidgetStyle.primary,
+                                  borderRadius: BorderRadius.circular(7)),
+                              child: Icon(
+                                size: 15,
+                                Icons.money,
+                                color: WidgetStyle.white,
+                              ),
+                            ),
+                            Text(
+                              '${koygshtenrx() + 5} ',
+                              style: const TextStyle(fontSize: 17),
                             ),
                           ],
                         ),
@@ -188,7 +236,7 @@ class _BuyState extends State<Buy> {
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            const Color(0XffABA6E3),
+                            const Color(0xFF194a7a),
                             WidgetStyle.primary
                           ],
                           begin: Alignment.topCenter,
@@ -217,7 +265,7 @@ class _BuyState extends State<Buy> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12))),
                       child: const Text(
-                        'Buy',
+                        'Checkout',
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),

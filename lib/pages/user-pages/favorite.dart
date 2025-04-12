@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,40 +17,37 @@ class favorite extends StatefulWidget {
 
 class _favoriteState extends State<favorite> {
   FirebaseFirestore instance = FirebaseFirestore.instance;
-  List<String> favoriteIds = []; // To store the list of favorite item IDs
+  List<int> favoriteIds = []; // favoritakan ba listek aheninawa bo pageaka
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadFavorites();
+    loadFavorites();
   }
 
-  // Load the favorite items of the currently logged-in user
-  Future<void> _loadFavorites() async {
+  Future<void> loadFavorites() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
         DocumentSnapshot userDoc =
             await instance.collection('users').doc(user.uid).get();
         if (userDoc.exists) {
-          // Get the list of favorite item IDs from Firestore
           List<dynamic> favorites = userDoc['favorites'] ?? [];
           setState(() {
-            favoriteIds = List<String>.from(favorites);
-            isLoading = false; // Once data is fetched, stop loading
+            favoriteIds = List<int>.from(favorites);
+            isLoading = false;
           });
         }
       } catch (e) {
-        // Handle error if any
-        print('Error fetching favorites: $e');
+        print('datay fav nahenetawa: $e');
         setState(() {
           isLoading = false;
         });
       }
     } else {
       setState(() {
-        isLoading = false; // Stop loading if no user is logged in
+        isLoading = false;
       });
     }
   }
@@ -63,25 +62,21 @@ class _favoriteState extends State<favorite> {
           padding:
               const EdgeInsets.only(bottom: 5, left: 10, right: 10, top: 20),
           child: isLoading
-              ? const Center(
-                  child:
-                      CircularProgressIndicator()) // Show loading spinner while fetching data
+              ? const Center(child: CircularProgressIndicator())
               : favoriteIds.isNotEmpty
                   ? FutureBuilder(
                       future: getData(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator());
                         }
                         if (snapshot.hasError) {
                           return Center(
                               child: Text("Error: ${snapshot.error}"));
                         }
                         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                          return const Center(
-                              child: Text("No favorite items found."));
+                          return const Center(child: Text("No favorite items"));
                         }
                         List<itemModel> data = snapshot.data!.docs
                             .map((e) => itemModel.fromJson(e.data()))
@@ -99,20 +94,12 @@ class _favoriteState extends State<favorite> {
     );
   }
 
-  // Fetch the favorite items based on the favoriteIds from the Firestore items collection
   Future<QuerySnapshot<Map<String, dynamic>>> getData() {
     return instance.collection('items').where('id', whereIn: favoriteIds).get();
   }
 
   Widget favoriteItem(Size size, itemModel item) {
-    String storage = item.storage.toString();
-    if (item.storage == 1024) {
-      storage = '1TB';
-    } else if (item.storage == 2048) {
-      storage = '2TB';
-    } else {
-      storage = item.storage.toString() + 'GB';
-    }
+    String spec = item.spec;
 
     return InkWell(
       onTap: () => Navigator.push(
@@ -147,19 +134,15 @@ class _favoriteState extends State<favorite> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 30,
+                      height: 25,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           IconButton(
                               onPressed: () async {
-                                // Remove the item from the local favorites list
                                 setState(() {
-                                  favoriteIds.remove(
-                                      item.id); // Remove from local list
+                                  favoriteIds.remove(item.id);
                                 });
-
-                                // Also update Firestore to reflect the change
                                 User? user = FirebaseAuth.instance.currentUser;
                                 if (user != null) {
                                   await FirebaseFirestore.instance
@@ -181,7 +164,7 @@ class _favoriteState extends State<favorite> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text('${item.price}\$'),
-                    Text(storage),
+                    Expanded(child: SizedBox(height: 300, child: Text(spec))),
                   ],
                 ),
               ),

@@ -100,7 +100,7 @@ class _SignupState extends State<Signup> {
         int newUserId = await generateUserId();
 
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'name': userNameController.text ?? '',
+          'name': userNameController.text,
           'email': user.email,
           'phone': phoneController.text, // Save phone
           'location': locationController.text, // Save location

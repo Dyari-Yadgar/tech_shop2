@@ -4,14 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_shop/Auth/login.dart';
 import 'package:tech_shop/Auth/signup.dart';
-
 import 'package:tech_shop/WidgetStyle.dart';
 import 'package:tech_shop/pages/admin-pages/admindashboard.dart';
 import 'package:tech_shop/pages/admin-pages/adminmenu.dart';
 import 'package:tech_shop/pages/user-pages/checkOut.dart';
-
 import 'package:tech_shop/pages/user-pages/menu.dart';
-
 import 'pages//user-pages/homepage2.dart';
 import 'pages//user-pages/favorite.dart';
 import 'package:firebase_core/firebase_core.dart';
