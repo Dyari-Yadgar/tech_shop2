@@ -7,6 +7,7 @@ class AboutUs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -46,18 +47,24 @@ class AboutUs extends StatelessWidget {
               crossAxisAlignment:
                   CrossAxisAlignment.center, // Centers horizontally
               children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: size.height * 0.40,
+                  child: Image.asset('assets/images/logo.jpg'),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
-                  decoration: BoxDecoration(
-                    color: WidgetStyle.white
-                  ),
+                  decoration: BoxDecoration(color: WidgetStyle.white),
                   child: Text(
                     'Welcome to Tech Shop, your one-stop destination for high-quality computers, laptops, accessories, and custom PC builds. '
                     'We are passionate about technology and committed to providing the best products and services to our customers.',
                     textAlign: TextAlign.center, // Centers text
                     style: TextStyle(
                       color: WidgetStyle.primary, // Applies primary color
-                      fontSize: 18, // Adjusts readability
-                      fontWeight: FontWeight.w500, // Slightly bold for emphasis
+                      fontSize:
+                          18, // Adjusts readability// Slightly bold for emphasis
                     ),
                   ),
                 ),

@@ -7,6 +7,7 @@ import 'package:tech_shop/Auth/signup.dart';
 import 'package:tech_shop/main.dart';
 import 'package:tech_shop/pages/user-pages/aboutapp.dart';
 import 'package:tech_shop/pages/user-pages/aboutus.dart';
+import 'package:tech_shop/pages/user-pages/contactus.dart';
 import 'package:tech_shop/pages/user-pages/history.dart';
 import 'package:tech_shop/pages/user-pages/pcbuild.dart';
 import 'package:tech_shop/pages/user-pages/profile.dart';
@@ -158,8 +159,10 @@ class _MenuState extends State<Menu> {
                         color: WidgetStyle.primary, size: 20),
                     onPressed: () async {
                       if (await checkUserExists()) {
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (_) => History()));
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => History()));
                       } else {
                         showLoginSignupDialog();
                       }
@@ -168,8 +171,10 @@ class _MenuState extends State<Menu> {
                   TextButton(
                     onPressed: () async {
                       if (await checkUserExists()) {
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (_) => History()));
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => History()));
                       } else {
                         showLoginSignupDialog();
                       }
@@ -187,17 +192,17 @@ class _MenuState extends State<Menu> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(FontAwesomeIcons.circleInfo,
-                        color: WidgetStyle.primary, size: 20),
+                    icon:
+                        Icon(Icons.group, color: WidgetStyle.primary, size: 20),
                     onPressed: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (_) => AboutUs()));
+                          CupertinoPageRoute(builder: (context) => AboutUs()));
                     },
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (_) => AboutUs()));
+                          CupertinoPageRoute(builder: (context) => AboutUs()));
                     },
                     child: Text('About Us',
                         style: TextStyle(
@@ -212,19 +217,44 @@ class _MenuState extends State<Menu> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(FontAwesomeIcons.info,
+                    icon: FaIcon(Icons.info_outline,
                         color: WidgetStyle.primary, size: 20),
                     onPressed: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (_) => AboutApp()));
+                          CupertinoPageRoute(builder: (context) => AboutApp()));
                     },
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (_) => AboutApp()));
+                          CupertinoPageRoute(builder: (context) => AboutApp()));
                     },
                     child: Text('About Application',
+                        style: TextStyle(
+                            color: WidgetStyle.primary, fontSize: 18)),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: FaIcon(Icons.support_agent_outlined,
+                        color: WidgetStyle.primary, size: 20),
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (context) => ContactUs()));
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (context) => ContactUs()));
+                    },
+                    child: Text('Contact Us',
                         style: TextStyle(
                             color: WidgetStyle.primary, fontSize: 18)),
                   ),

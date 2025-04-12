@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tech_shop/Auth/login.dart';
 import 'package:tech_shop/Data/ItemData.dart';
 import 'package:tech_shop/main.dart';
 import 'package:tech_shop/model/buyItemModel.dart';
@@ -251,24 +253,60 @@ class _BuyState extends State<Buy> {
                               offset: const Offset(0, 2)) //offset shwenakayate
                         ]),
                     child: ElevatedButton(
-                      onPressed: () {
-                        BottomNavigation.pageindex = 2;
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => BottomNavigation()));
-                      },
-                      style: ElevatedButton.styleFrom(
-                          // yane be background
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12))),
-                      child: const Text(
-                        'Checkout',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
+  onPressed: () async {
+    // Check if the user is logged in
+    User? user = FirebaseAuth.instance.currentUser;
+    
+    if (user == null) {
+      // If no user is logged in, show a login/signup prompt
+      // Optionally, you could show a dialog or navigate to the login screen
+      // Example: Show a simple dialog to inform the user
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Please log in'),
+            content: Text('You need to log in to proceed with the checkout.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Navigate to the login screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()), // Replace with your LoginPage widget
+                  );
+                },
+                child: Text('Log in'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // If the user is logged in, proceed to the checkout page
+      BottomNavigation.pageindex = 2;
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => BottomNavigation(),
+        ),
+      );
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.transparent,
+    shadowColor: Colors.transparent,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
+  child: const Text(
+    'Checkout',
+    style: TextStyle(color: Colors.white, fontSize: 20),
+  ),
+)
+
                   ))
             ],
           ),
