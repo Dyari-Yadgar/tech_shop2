@@ -130,7 +130,7 @@ class _ProfEditState extends State<ProfEdit> {
                       builder: (context) {
                         return AlertDialog(
                           content: const Text(
-                              "enter one field to update, or go back"),
+                              "at least enter one field to update"),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
@@ -155,7 +155,7 @@ class _ProfEditState extends State<ProfEdit> {
                         .collection('users')
                         .doc(uid)
                         .update(updatedData);
-
+                        Navigator.pop(context);
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -186,6 +186,7 @@ class _ProfEditState extends State<ProfEdit> {
                       },
                     );
                   }
+                  
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: WidgetStyle.primary,

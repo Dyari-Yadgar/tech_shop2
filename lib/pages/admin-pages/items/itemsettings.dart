@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tech_shop/WidgetStyle.dart';
-import 'package:tech_shop/pages/admin-pages/items/deletitem.dart';
+import 'package:tech_shop/pages/admin-pages/items/additem.dart';
 import 'package:tech_shop/pages/admin-pages/items/updateitem.dart';
-import 'package:tech_shop/pages/admin-pages/users/usersetting.dart';
 
 class ItemSettings extends StatefulWidget {
   const ItemSettings({super.key});
@@ -128,11 +127,11 @@ class _ItemSettingsState extends State<ItemSettings> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   CupertinoPageRoute(
-                                //       builder: (context) => UserSettings()),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => AddItem()),
+                                );
                               },
                               icon: FaIcon(
                                 Icons.add_circle,
@@ -142,11 +141,11 @@ class _ItemSettingsState extends State<ItemSettings> {
                             SizedBox(width: 8),
                             TextButton(
                               onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   CupertinoPageRoute(
-                                //       builder: (context) => UserSettings()),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => AddItem()),
+                                );
                               },
                               style: TextButton.styleFrom(
                                 iconColor: Colors.white,
@@ -181,31 +180,84 @@ class _ItemSettingsState extends State<ItemSettings> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (context) => DeleteItem()),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   CupertinoPageRoute(
+                                //       builder: (context) => ()),
+                                // );
                               },
                               icon: FaIcon(
-                                Icons.delete,
+                                Icons.disabled_visible,
                                 color: Colors.white,
                               ),
                             ),
                             SizedBox(width: 8),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (context) => DeleteItem()),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   CupertinoPageRoute(
+                                //       builder: (context) => ()),
+                                // );
                               },
                               style: TextButton.styleFrom(
                                 iconColor: Colors.white,
                               ),
                               child: Text(
-                                'Delete an Item',
+                                'Disable item',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 65,
+                        width: 300,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                        decoration: BoxDecoration(
+                          color: WidgetStyle.primary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   CupertinoPageRoute(
+                                //       builder: (context) => ()),
+                                // );
+                              },
+                              icon: FaIcon(
+                              Icons.event_available,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            TextButton(
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   CupertinoPageRoute(
+                                //       builder: (context) => ()),
+                                // );
+                              },
+                              style: TextButton.styleFrom(
+                                iconColor: Colors.white,
+                              ),
+                              child: Text(
+                                'Enable item',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),

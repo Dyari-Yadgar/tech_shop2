@@ -176,9 +176,9 @@ class _HomePage2State extends State<HomePage2> {
 
                 return Expanded(
                   child: GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 30,
-                    mainAxisSpacing: 30,
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 40,
+                    mainAxisSpacing: 40,
                     childAspectRatio: 0.75,
                     children: data.map((item) => itemCard(item)).toList(),
                   ),
@@ -239,7 +239,8 @@ class _HomePage2State extends State<HomePage2> {
     return instance.collection('items').get();
   }
 
-  Widget itemCard(itemModel item) {String storage = item.storage.toString();
+  Widget itemCard(itemModel item) {
+    String storage = item.storage.toString();
     if (item.storage == 1024) {
       storage = '1TB';
     } else if (item.storage == 2048) {
@@ -292,7 +293,6 @@ class _HomePage2State extends State<HomePage2> {
             ),
           ),
           Text('Price :  \$${item.price}'),
-          
         ],
       ),
     );

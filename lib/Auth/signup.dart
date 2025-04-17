@@ -58,7 +58,7 @@ class _SignupState extends State<Signup> {
     if (!docSnapshot.exists) {
       // Generate a unique user ID as an integer
       int newUserId = await generateUserId();
-
+      
       await userDoc.set({
         'name': user.displayName ?? '',
         'email': user.email,

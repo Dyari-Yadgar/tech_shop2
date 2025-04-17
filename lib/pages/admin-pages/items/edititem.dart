@@ -20,6 +20,8 @@ class _EditItemState extends State<EditItem> {
   final typeController = TextEditingController();
   final specController = TextEditingController();
   final imageController = TextEditingController();
+  final isEnableController = TextEditingController();
+  bool isEnable = true;
 
   String selectedBrand = 'Samsung';
 
@@ -48,6 +50,7 @@ class _EditItemState extends State<EditItem> {
   @override
   void initState() {
     super.initState();
+    isEnable = widget.itemData['isEnable'] ?? true;
     nameController.text = widget.itemData['name'] ?? '';
     priceController.text = widget.itemData['price'].toString();
     typeController.text = widget.itemData['type'] ?? '';
@@ -221,6 +224,35 @@ class _EditItemState extends State<EditItem> {
                     ),
                   ),
                 ),
+                SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  value: isEnable ? 'Enable' : 'Disable',
+                  items: ['Enable', 'Disable']
+                      .map((option) => DropdownMenuItem<String>(
+                            value: option,
+                            child: Text(option),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      isEnable = value ==
+                          'Enable'; // Update the isEnable state based on selection
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Item Status',
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 18),
+                    border: border,
+                    enabledBorder: border,
+                    focusedBorder: border.copyWith(
+                      borderSide:
+                          BorderSide(color: WidgetStyle.primary, width: 2),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 20),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
@@ -243,6 +275,7 @@ class _EditItemState extends State<EditItem> {
                         'spec': specController.text,
                         'image': imageController.text,
                         'sharika': selectedBrand,
+                         'isenable': isEnable
                       });
                       Navigator.pop(context);
                     }
