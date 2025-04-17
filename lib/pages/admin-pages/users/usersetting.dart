@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tech_shop/pages/admin-pages/userhistory.dart';
+import 'package:tech_shop/pages/admin-pages/users/userhistory.dart';
 import 'package:tech_shop/widgetstyle.dart';
 
 class UserSettings extends StatefulWidget {

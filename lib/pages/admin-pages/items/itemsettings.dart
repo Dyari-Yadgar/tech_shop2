@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tech_shop/WidgetStyle.dart';
-import 'package:tech_shop/pages/admin-pages/usersetting.dart';
+import 'package:tech_shop/pages/admin-pages/items/deletitem.dart';
+import 'package:tech_shop/pages/admin-pages/items/updateitem.dart';
+import 'package:tech_shop/pages/admin-pages/users/usersetting.dart';
 
 class ItemSettings extends StatefulWidget {
   const ItemSettings({super.key});
@@ -73,11 +75,11 @@ class _ItemSettingsState extends State<ItemSettings> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   CupertinoPageRoute(
-                                //       builder: (context) => Profile()),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => UpdateItem()),
+                                );
                               },
                               icon: Icon(
                                 Icons.settings,
@@ -87,17 +89,70 @@ class _ItemSettingsState extends State<ItemSettings> {
                             SizedBox(width: 8),
                             TextButton(
                               onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => UpdateItem()),
+                                );
+                              },
+                              style: TextButton.styleFrom(
+                                iconColor: Colors.white,
+                              ),
+                              child: Text(
+                                'Edit Items',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 65,
+                        width: 300,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                        decoration: BoxDecoration(
+                          color: WidgetStyle.primary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
                                 // Navigator.push(
                                 //   context,
                                 //   CupertinoPageRoute(
-                                //       builder: (context) => Profile()),
+                                //       builder: (context) => UserSettings()),
+                                // );
+                              },
+                              icon: FaIcon(
+                                Icons.add_circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            TextButton(
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   CupertinoPageRoute(
+                                //       builder: (context) => UserSettings()),
                                 // );
                               },
                               style: TextButton.styleFrom(
                                 iconColor: Colors.white,
                               ),
                               child: Text(
-                                'Edit Item',
+                                'Add an Item',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
@@ -129,11 +184,11 @@ class _ItemSettingsState extends State<ItemSettings> {
                                 Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                      builder: (context) => UserSettings()),
+                                      builder: (context) => DeleteItem()),
                                 );
                               },
                               icon: FaIcon(
-                                FontAwesomeIcons.users,
+                                Icons.delete,
                                 color: Colors.white,
                               ),
                             ),
@@ -143,59 +198,14 @@ class _ItemSettingsState extends State<ItemSettings> {
                                 Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                      builder: (context) => UserSettings()),
+                                      builder: (context) => DeleteItem()),
                                 );
                               },
                               style: TextButton.styleFrom(
                                 iconColor: Colors.white,
                               ),
                               child: Text(
-                                'Users',
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 65,
-                        width: 300,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-                        decoration: BoxDecoration(
-                          color: WidgetStyle.primary,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.computer,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            SizedBox(width: 8),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (context) => ItemSettings()),
-                                );
-                              },
-                              style: TextButton.styleFrom(
-                                iconColor: Colors.white,
-                              ),
-                              child: Text(
-                                'Item Settings',
+                                'Delete an Item',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),

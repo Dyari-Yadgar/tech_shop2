@@ -14,7 +14,6 @@ import 'pages//user-pages/favorite.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-// import 'package:provider_installer/provider_installer.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await ProviderInstaller.installProviders();
@@ -56,7 +55,7 @@ class MyApp extends StatelessWidget {
           );
         }
 
-        // If user exists, check their role
+        // check user rol
         return FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
               .collection('users')
@@ -202,6 +201,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
         ),
       ),
+
+      // am code'a optimize krawa la shweneki trda boya hamisha role user'a
       drawer: Drawer(
           backgroundColor: Colors.white,
           child: StreamBuilder<DocumentSnapshot>(
@@ -229,7 +230,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               }
 
               if (userRole == 'admin') {
-                return AdminMenu();
+                return Text("");
               } else {
                 return Menu();
               }

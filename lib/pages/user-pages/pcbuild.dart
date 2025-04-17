@@ -66,7 +66,7 @@ class _PcBuildState extends State<PcBuild> {
         caseItems = snapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .toList();
-      } else if (type == 'Cooler') {
+      } else if (type == 'COOLER') {
         coolerItems = snapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .toList();
@@ -84,7 +84,7 @@ class _PcBuildState extends State<PcBuild> {
     getItems('GPU');
     getItems('MB');
     getItems('CASE');
-    getItems('Cooler');
+    getItems('COOLER');
   }
 
   @override
@@ -120,7 +120,7 @@ class _PcBuildState extends State<PcBuild> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // CPU Dropdown
+
               buildDropdownRow('CPU', selectedCpu, cpuItems, (val) {
                 setState(() {
                   selectedCpu = val;
@@ -166,7 +166,7 @@ class _PcBuildState extends State<PcBuild> {
                 });
               }),
 
-              buildDropdownRow('Cooler', selectedCooler, coolerItems, (val) {
+              buildDropdownRow('COOLER', selectedCooler, coolerItems, (val) {
                 setState(() {
                   selectedCooler = val;
                 });

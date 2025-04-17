@@ -69,8 +69,11 @@ class _HistoryState extends State<History> {
                 itemCount: history.length,
                 itemBuilder: (context, index) {
                   Map<String, dynamic> historyItem = history[index];
+                  final record = history[index];
 
-                  String date = historyItem['date'].toDate().toString();
+                  final timestamp = record['date'] as Timestamp?;
+                  final date = timestamp?.toDate();
+
                   List<dynamic> itemList = historyItem['name'];
                   String total = historyItem['total'].toString();
 
@@ -78,10 +81,9 @@ class _HistoryState extends State<History> {
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(12), // Rounded corners
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      elevation: 5, // Add shadow effect
+                      elevation: 5,
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Column(
@@ -118,15 +120,15 @@ class _HistoryState extends State<History> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  'Date of Order: $date',
+                                  'Date of Order: ${date?.day}/${date?.month}/${date?.year}',
                                   style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width >
-                                                  600
-                                              ? 16
-                                              : 14, // Responsivekrawa
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black54),
+                                    fontSize:
+                                        MediaQuery.of(context).size.width > 600
+                                            ? 16
+                                            : 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black54,
+                                  ),
                                 ),
                               ],
                             ),
@@ -138,7 +140,6 @@ class _HistoryState extends State<History> {
                                 String itemPrice = item['price'].toString();
                                 int quantity = item['quantity'];
                                 String imageUrl = item['image'];
-
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 4.0),
@@ -146,8 +147,8 @@ class _HistoryState extends State<History> {
                                     children: [
                                       Image.network(
                                         imageUrl,
-                                        width: 30,
-                                        height: 30,
+                                        width: 20,
+                                        height: 10,
                                         fit: BoxFit.cover,
                                       ),
                                       SizedBox(width: 8),
@@ -199,7 +200,6 @@ class _HistoryState extends State<History> {
                   );
                 },
               );
-            
             } else {
               return Text('No data found');
             }

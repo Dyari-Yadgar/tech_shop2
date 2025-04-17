@@ -22,6 +22,7 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  
   Future<bool> checkUserExists() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return false;
@@ -62,6 +63,7 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -229,7 +231,7 @@ class _MenuState extends State<Menu> {
                       Navigator.push(context,
                           CupertinoPageRoute(builder: (context) => AboutApp()));
                     },
-                    child: Text('About Application',
+                    child: Text('About Staff',
                         style: TextStyle(
                             color: WidgetStyle.primary, fontSize: 18)),
                   ),
