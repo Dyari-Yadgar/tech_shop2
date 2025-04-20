@@ -230,7 +230,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             onPressed: () {
                               Navigator.of(context).pushReplacement(
                                 CupertinoPageRoute(
-                                    builder: (context) => History()),
+                                    builder: (context) => AdminDashboard()),
                               );
                             },
                             style: TextButton.styleFrom(
