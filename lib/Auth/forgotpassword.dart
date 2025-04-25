@@ -24,15 +24,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            'Tech Shop',
-            style: TextStyle(color: Colors.white),
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
           ),
           centerTitle: true,
+          title: Text(
+            'Add New Item',
+            style: TextStyle(color: WidgetStyle.white),
+          ),
           backgroundColor: WidgetStyle.primary,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          ),
         ),
         body: Center(
           child: Column(

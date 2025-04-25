@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                   key: emailValid,
                   decoration: InputDecoration(
                     hintText: 'Email',
-                    suffix: Icon(
+                    suffixIcon: Icon(
                       Icons.email,
                       color: WidgetStyle.primary,
                     ),
@@ -138,14 +138,14 @@ class _LoginState extends State<Login> {
                   obscureText: isPassHide,
                   decoration: InputDecoration(
                     hintText: 'Password',
-                    suffix: IconButton(
+                    suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
                             isPassHide = !isPassHide;
                           });
                         },
                         icon: Icon(
-                          isPassHide ? Icons.visibility : Icons.visibility_off,
+                          isPassHide ? Icons.visibility : Icons.visibility_off, color: WidgetStyle.primary,
                         )),
                     focusedBorder: Border(),
                     enabledBorder: Border(),

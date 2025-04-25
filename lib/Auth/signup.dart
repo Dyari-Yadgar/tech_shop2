@@ -58,7 +58,7 @@ class _SignupState extends State<Signup> {
     if (!docSnapshot.exists) {
       // Generate a unique user ID as an integer
       int newUserId = await generateUserId();
-      
+
       await userDoc.set({
         'name': user.displayName ?? '',
         'email': user.email,
@@ -207,9 +207,12 @@ class _SignupState extends State<Signup> {
                   controller: userNameController,
                   decoration: InputDecoration(
                     hintText: 'Username',
-                    suffix: Icon(Icons.person, color: WidgetStyle.primary),
-                    focusedBorder: Border(),
+                    suffixIcon: Icon(Icons.person, color: WidgetStyle.primary),
+                                        focusedBorder: Border(),
                     enabledBorder: Border(),
+                    errorBorder: Border(),
+                    disabledBorder: Border(),
+                    focusedErrorBorder: Border(),
                   ),
                 ),
               ),
@@ -222,13 +225,13 @@ class _SignupState extends State<Signup> {
                   validator: (value) {
                     if (value == null || !value.contains('@'))
                       return 'Email must contain @';
-                    if (!value.endsWith('.com'))
+                    if (!value.endsWith('.com') && !value.endsWith('.iq'))
                       return 'Email must end with .com';
                     return null;
                   },
                   decoration: InputDecoration(
                     hintText: 'Email',
-                    suffix: Icon(Icons.email, color: WidgetStyle.primary),
+                    suffixIcon: Icon(Icons.email, color: WidgetStyle.primary),
                     focusedBorder: Border(),
                     enabledBorder: Border(),
                     errorBorder: Border(),
@@ -249,12 +252,13 @@ class _SignupState extends State<Signup> {
                   obscureText: isPassHide,
                   decoration: InputDecoration(
                     hintText: 'Password',
-                    suffix: IconButton(
+                    suffixIcon: IconButton(
                       onPressed: () => setState(() => isPassHide = !isPassHide),
                       icon: Icon(
-                          isPassHide ? Icons.visibility : Icons.visibility_off),
+                          isPassHide ? Icons.visibility : Icons.visibility_off,
+                          color: WidgetStyle.primary),
                     ),
-                    focusedBorder: Border(),
+                                        focusedBorder: Border(),
                     enabledBorder: Border(),
                     errorBorder: Border(),
                     disabledBorder: Border(),
@@ -272,9 +276,12 @@ class _SignupState extends State<Signup> {
                       : null,
                   decoration: InputDecoration(
                     hintText: 'Phone Number',
-                    suffix: Icon(Icons.phone, color: WidgetStyle.primary),
-                    focusedBorder: Border(),
+                    suffixIcon: Icon(Icons.phone, color: WidgetStyle.primary),
+                                        focusedBorder: Border(),
                     enabledBorder: Border(),
+                    errorBorder: Border(),
+                    disabledBorder: Border(),
+                    focusedErrorBorder: Border(),
                   ),
                 ),
               ),
@@ -285,9 +292,12 @@ class _SignupState extends State<Signup> {
                   controller: locationController,
                   decoration: InputDecoration(
                     hintText: 'Location',
-                    suffix: Icon(Icons.location_on, color: WidgetStyle.primary),
-                    focusedBorder: Border(),
+                    suffixIcon: Icon(Icons.location_on, color: WidgetStyle.primary),
+                                        focusedBorder: Border(),
                     enabledBorder: Border(),
+                    errorBorder: Border(),
+                    disabledBorder: Border(),
+                    focusedErrorBorder: Border(),
                   ),
                 ),
               ),

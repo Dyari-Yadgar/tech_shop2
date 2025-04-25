@@ -302,7 +302,7 @@ class _BuyState extends State<Buy> {
     ),
   ),
   child: const Text(
-    'Checkout',
+    'Add To Card',
     style: TextStyle(color: Colors.white, fontSize: 20),
   ),
 )

@@ -19,7 +19,7 @@ class _AddItemState extends State<AddItem> {
   final specController = TextEditingController();
   final imageController = TextEditingController();
 
-  String selectedBrand = 'Samsung';
+  String selectedBrand = 'Gaming parts';
 
   final List<String> brands = [
     "Samsung",
@@ -182,6 +182,8 @@ class _AddItemState extends State<AddItem> {
                           BorderSide(color: WidgetStyle.primary, width: 2),
                     ),
                   ),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Enter item image' : null,
                 ),
                 SizedBox(height: 12),
                 DropdownButtonFormField<String>(
@@ -207,6 +209,8 @@ class _AddItemState extends State<AddItem> {
                           BorderSide(color: WidgetStyle.primary, width: 2),
                     ),
                   ),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Enter item brand' : null,
                 ),
                 SizedBox(height: 20),
                 ElevatedButton.icon(
@@ -220,34 +224,48 @@ class _AddItemState extends State<AddItem> {
                   ),
                   onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      // Get the item name and use it as the document ID
                       String docId = nameController.text.trim().toUpperCase();
 
-                      // Generate the item ID by counting existing items
                       final itemsSnapshot = await FirebaseFirestore.instance
                           .collection('items')
                           .get();
                       int newItemId = itemsSnapshot.size + 2;
                       var newItem = {
                         'id': newItemId,
-                        'isenable' : true,
+                        'isenable': true,
                         'name': docId,
-                        'price': double.tryParse(priceController.text) ?? 0,
+                        'price': int.tryParse(priceController.text) ?? 0,
                         'type': typeController.text.toUpperCase(),
                         'spec': specController.text,
                         'image': imageController.text,
                         'sharika': selectedBrand,
-                        'storage' : 1
+                        'storage': 1
                       };
 
-                      // Add the item to Firestore using name as doc ID
                       await FirebaseFirestore.instance
                           .collection('items')
                           .doc(docId)
                           .set(newItem);
 
                       print("Item added with ID: $newItemId and docId: $docId");
-                      Navigator.pop(context);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text("Item added successfully!"),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // dialogaka daxa
+                                  Navigator.of(context)
+                                      .pop(); // agaretawa page item settings
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     }
                   },
                   icon: Icon(Icons.add_box_outlined),

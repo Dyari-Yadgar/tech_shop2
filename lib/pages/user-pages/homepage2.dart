@@ -25,7 +25,7 @@ class _HomePage2State extends State<HomePage2> {
   String upperCaseValue = '';
 
   int selectedIndex = -1;
-  List typeFilter = ['All', 'Price', 'Storage'];
+  List typeFilter = ['All', 'Price'];
   int selectedIndexType = 0;
   List<itemModel> data = [];
   List nameSharika = [];
@@ -176,7 +176,7 @@ class _HomePage2State extends State<HomePage2> {
 
                 return Expanded(
                   child: GridView.count(
-                    crossAxisCount: 3,
+                    crossAxisCount: 2,
                     crossAxisSpacing: 40,
                     mainAxisSpacing: 40,
                     childAspectRatio: 0.75,
@@ -284,7 +284,8 @@ class _HomePage2State extends State<HomePage2> {
                       width: double.infinity,
                       child: Text(
                         item.name,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold),
+                        
                       ),
                     ),
                   ),

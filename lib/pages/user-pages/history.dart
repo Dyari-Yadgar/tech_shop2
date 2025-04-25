@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tech_shop/widgetstyle.dart';
 
+
+// aw historyay user daibene
 class History extends StatefulWidget {
   const History({super.key});
 
@@ -49,7 +51,7 @@ class _HistoryState extends State<History> {
             ),
           ],
         ),
-        body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>( 
           future: instance.collection('users').doc(user!.uid).get(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -65,6 +67,9 @@ class _HistoryState extends State<History> {
                 return Center(child: Text('No data available'));
               }
 
+              // Reverse the history list to show the most recent orders at the top
+              history = List.from(history.reversed);
+
               return ListView.builder(
                 itemCount: history.length,
                 itemBuilder: (context, index) {
@@ -76,6 +81,7 @@ class _HistoryState extends State<History> {
 
                   List<dynamic> itemList = historyItem['name'];
                   String total = historyItem['total'].toString();
+                  final orderNumber = history.length -index;
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -98,7 +104,7 @@ class _HistoryState extends State<History> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  'Order Number ${index + 1}',
+                                  'Order Number $orderNumber',
                                   style: TextStyle(
                                       fontSize:
                                           MediaQuery.of(context).size.width >
@@ -161,7 +167,7 @@ class _HistoryState extends State<History> {
                                                         .width >
                                                     600
                                                 ? 16
-                                                : 14, // Responsivekrawa
+                                                : 14, // Responsive
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -187,7 +193,7 @@ class _HistoryState extends State<History> {
                                           MediaQuery.of(context).size.width >
                                                   600
                                               ? 18
-                                              : 16, // Responsivekrawa
+                                              : 16, // Responsive
                                       fontWeight: FontWeight.bold,
                                       color: WidgetStyle.primary),
                                 ),

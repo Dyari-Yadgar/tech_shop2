@@ -353,7 +353,7 @@ class _ItemViewState extends State<ItemView> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12))),
                     child: const Text(
-                      'Add to card',
+                      'Check Out',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),

@@ -89,202 +89,204 @@ class _PcBuildState extends State<PcBuild> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back),
-          color: Colors.white,
-        ),
-        centerTitle: true,
-        title: Text(
-          'Tech Shop',
-          style: TextStyle(
-            color: WidgetStyle.white,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
           ),
+          centerTitle: true,
+          title: Text(
+            'Tech Shop',
+            style: TextStyle(
+              color: WidgetStyle.white,
+            ),
+          ),
+          backgroundColor: WidgetStyle.primary,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          ),
+          actions: [
+            SizedBox(width: 40),
+            SizedBox(width: 10),
+          ],
         ),
-        backgroundColor: WidgetStyle.primary,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        ),
-        actions: [
-          SizedBox(width: 40),
-          SizedBox(width: 10),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-
-              buildDropdownRow('CPU', selectedCpu, cpuItems, (val) {
-                setState(() {
-                  selectedCpu = val;
-                });
-              }),
-
-              buildDropdownRow('RAM', selectedRam, ramItems, (val) {
-                setState(() {
-                  selectedRam = val;
-                });
-              }),
-
-              buildDropdownRow('Hard', selectedHardDrive, hardDriveItems,
-                  (val) {
-                setState(() {
-                  selectedHardDrive = val;
-                });
-              }),
-
-              buildDropdownRow(
-                  'Power Supply', selectedPowerSupply, powerSupplyItems, (val) {
-                setState(() {
-                  selectedPowerSupply = val;
-                });
-              }),
-
-              buildDropdownRow('GPU', selectedGpu, gpuItems, (val) {
-                setState(() {
-                  selectedGpu = val;
-                });
-              }),
-
-              buildDropdownRow(
-                  'Motherboard', selectedMotherboard, motherboardItems, (val) {
-                setState(() {
-                  selectedMotherboard = val;
-                });
-              }),
-
-              buildDropdownRow('Case', selectedCase, caseItems, (val) {
-                setState(() {
-                  selectedCase = val;
-                });
-              }),
-
-              buildDropdownRow('COOLER', selectedCooler, coolerItems, (val) {
-                setState(() {
-                  selectedCooler = val;
-                });
-              }),
-
-              // Space between components
-              SizedBox(height: 20),
-
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (showPriceSummary) ...[
-                    // Total Price
-                    Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.sackDollar,
-                          color: Colors.green,
-                          size: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          "Total: \$${calculateTotalPrice().toStringAsFixed(2)}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+      
+                buildDropdownRow('CPU', selectedCpu, cpuItems, (val) {
+                  setState(() {
+                    selectedCpu = val;
+                  });
+                }),
+      
+                buildDropdownRow('RAM', selectedRam, ramItems, (val) {
+                  setState(() {
+                    selectedRam = val;
+                  });
+                }),
+      
+                buildDropdownRow('Hard', selectedHardDrive, hardDriveItems,
+                    (val) {
+                  setState(() {
+                    selectedHardDrive = val;
+                  });
+                }),
+      
+                buildDropdownRow(
+                    'Power Supply', selectedPowerSupply, powerSupplyItems, (val) {
+                  setState(() {
+                    selectedPowerSupply = val;
+                  });
+                }),
+      
+                buildDropdownRow('GPU', selectedGpu, gpuItems, (val) {
+                  setState(() {
+                    selectedGpu = val;
+                  });
+                }),
+      
+                buildDropdownRow(
+                    'Motherboard', selectedMotherboard, motherboardItems, (val) {
+                  setState(() {
+                    selectedMotherboard = val;
+                  });
+                }),
+      
+                buildDropdownRow('Case', selectedCase, caseItems, (val) {
+                  setState(() {
+                    selectedCase = val;
+                  });
+                }),
+      
+                buildDropdownRow('COOLER', selectedCooler, coolerItems, (val) {
+                  setState(() {
+                    selectedCooler = val;
+                  });
+                }),
+      
+                // Space between components
+                SizedBox(height: 20),
+      
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (showPriceSummary) ...[
+                      // Total Price
+                      Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.sackDollar,
+                            color: Colors.green,
+                            size: 20,
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-
-                    // Total with 4% Discount
-                    Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.percent,
-                          color: Colors.blue,
-                          size: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          "Total with 4% Discount: \$${(calculateTotalPrice() * 0.96).toStringAsFixed(2)}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-
-                    // Compatibility Text
-                    Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.solidCheckCircle,
-                          color: getCompatibilityText().contains("Bad")
-                              ? Colors.red
-                              : Colors.green,
-                          size: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            getCompatibilityText(),
+                          SizedBox(width: 10),
+                          Text(
+                            "Total: \$${calculateTotalPrice().toStringAsFixed(2)}",
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: getCompatibilityText().contains("Bad")
-                                  ? Colors.red
-                                  : Colors.green,
+                              fontSize: 18,
+                              color: Colors.black,
                             ),
                           ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+      
+                      // Total with 4% Discount
+                      Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.percent,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Total with 4% Discount: \$${(calculateTotalPrice() * 0.96).toStringAsFixed(2)}",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+      
+                      // Compatibility Text
+                      Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.solidCheckCircle,
+                            color: getCompatibilityText().contains("Bad")
+                                ? Colors.red
+                                : Colors.green,
+                            size: 20,
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              getCompatibilityText(),
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: getCompatibilityText().contains("Bad")
+                                    ? Colors.red
+                                    : Colors.green,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+      
+                      SizedBox(height: 10),
+                    ],
+      
+                    // Button to Build PC
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: WidgetStyle.primary,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ],
-                    ),
-
-                    SizedBox(height: 10),
-                  ],
-
-                  // Button to Build PC
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: WidgetStyle.primary,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          showPriceSummary = true;
+                        });
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.screwdriverWrench,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Build Your PC',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        showPriceSummary = true;
-                      });
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.screwdriverWrench,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Build Your PC',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
