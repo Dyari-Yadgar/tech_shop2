@@ -63,7 +63,7 @@ class _HistoryState extends State<History> {
               Map<String, dynamic> data = snapshot.data!.data()!;
               List history = data['history'];
 
-              if (history.isEmpty) {
+              if (history == null || history.isEmpty) {
                 return Center(child: Text('No data available'));
               }
 
@@ -75,10 +75,8 @@ class _HistoryState extends State<History> {
                 itemBuilder: (context, index) {
                   Map<String, dynamic> historyItem = history[index];
                   final record = history[index];
-
                   final timestamp = record['date'] as Timestamp?;
                   final date = timestamp?.toDate();
-
                   List<dynamic> itemList = historyItem['name'];
                   String total = historyItem['total'].toString();
                   final orderNumber = history.length -index;

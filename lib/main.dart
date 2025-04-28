@@ -7,6 +7,7 @@ import 'package:tech_shop/Auth/signup.dart';
 import 'package:tech_shop/WidgetStyle.dart';
 import 'package:tech_shop/pages/admin-pages/admindashboard.dart';
 import 'package:tech_shop/pages/admin-pages/adminmenu.dart';
+import 'package:tech_shop/pages/splash.dart';
 import 'package:tech_shop/pages/user-pages/checkOut.dart';
 import 'package:tech_shop/pages/user-pages/menu.dart';
 import 'pages//user-pages/homepage2.dart';
@@ -22,7 +23,15 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(
+  MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: SplashScreen(),
+  ),
+);
+
+
 }
 
 FirebaseAuth instance = FirebaseAuth.instance;
@@ -143,7 +152,6 @@ class MyApp extends StatelessWidget {
                 ),
               ));
             }
-
             final data = snapshot.data!.data() as Map<String, dynamic>;
             final role = data['role'];
 

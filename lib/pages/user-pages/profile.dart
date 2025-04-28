@@ -167,7 +167,7 @@ class _ProfileState extends State<Profile> {
                                 '${snapshot.data!['email']}',
                                 style: TextStyle(
                                   fontSize:
-                                      MediaQuery.of(context).size.width * 0.05,
+                                      MediaQuery.of(context).size.width * 0.04,
                                   color: Colors.grey[700],
                                   fontWeight: FontWeight.w500,
                                 ),

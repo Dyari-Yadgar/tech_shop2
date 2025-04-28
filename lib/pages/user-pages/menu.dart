@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tech_shop/Auth/login.dart';
 import 'package:tech_shop/Auth/signup.dart';
 import 'package:tech_shop/main.dart';
+import 'package:tech_shop/pages/admin-pages/users/pcbuildoption.dart';
 import 'package:tech_shop/pages/user-pages/aboutapp.dart';
 import 'package:tech_shop/pages/user-pages/aboutus.dart';
 import 'package:tech_shop/pages/user-pages/contactus.dart';
@@ -136,13 +137,13 @@ class _MenuState extends State<Menu> {
                         color: WidgetStyle.primary, size: 20),
                     onPressed: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (_) => PcBuild()));
+                          CupertinoPageRoute(builder: (_) => PcBuildOption()));
                     },
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.push(context,
-                          CupertinoPageRoute(builder: (_) => PcBuild()));
+                          CupertinoPageRoute(builder: (_) => PcBuildOption()));
                     },
                     child: Text('Custom Pc Build',
                         style: TextStyle(

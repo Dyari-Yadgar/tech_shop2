@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tech_shop/widgetstyle.dart';
 
-
-// aw historyay admin daibene
 class UserHistory extends StatelessWidget {
   final String userId;
   final String userName;
@@ -20,7 +19,6 @@ class UserHistory extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
             color: Colors.white,
           ),
-          automaticallyImplyLeading: false,
           centerTitle: true,
           title: Text(
             'Tech Shop',
@@ -31,11 +29,9 @@ class UserHistory extends StatelessWidget {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
           ),
         ),
-        body: StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('users')
-              .doc(userId)
-              .snapshots(),
+        body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          future:
+              FirebaseFirestore.instance.collection('users').doc(userId).get(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -45,15 +41,16 @@ class UserHistory extends StatelessWidget {
               return const Center(child: Text('No user data found'));
             }
 
-            final userData = snapshot.data!.data() as Map<String, dynamic>;
-            final history = userData['history'] as List<dynamic>?;
+            final userData = snapshot.data!.data()!;
+            List history = userData['history'] ?? [];
 
-            if (history == null || history.isEmpty) {
+            if (history.isEmpty) {
               return const Center(child: Text('No purchase history found'));
             }
 
+            history = List.from(history.reversed);
+
             return ListView.builder(
-              padding: const EdgeInsets.all(12),
               itemCount: history.length,
               itemBuilder: (context, index) {
                 final record = history[index];
@@ -61,6 +58,7 @@ class UserHistory extends StatelessWidget {
                 final date = timestamp?.toDate();
                 final items = record['name'] as List<dynamic>? ?? [];
                 final total = record['total']?.toString() ?? '0';
+                final orderNumber = history.length - index;
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -76,14 +74,14 @@ class UserHistory extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Icon(
+                              FaIcon(
                                 Icons.shopping_basket,
                                 color: WidgetStyle.primary,
                                 size: 24,
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'Order Number ${index + 1}',
+                                'Order Number $orderNumber',
                                 style: TextStyle(
                                   fontSize:
                                       MediaQuery.of(context).size.width > 600
@@ -120,7 +118,8 @@ class UserHistory extends StatelessWidget {
                             ),
                           const SizedBox(height: 10),
                           Column(
-                            children: items.map((item) {
+                            children: List.generate(items.length, (i) {
+                              final item = items[i];
                               final itemName = item['name'] ?? 'Unnamed Item';
                               final itemPrice =
                                   item['price']?.toString() ?? '0';
@@ -135,8 +134,8 @@ class UserHistory extends StatelessWidget {
                                     imageUrl.isNotEmpty
                                         ? Image.network(
                                             imageUrl,
-                                            width: 40,
-                                            height: 40,
+                                            width: 20,
+                                            height: 10,
                                             fit: BoxFit.cover,
                                           )
                                         : const Icon(Icons.shopping_bag),
@@ -158,7 +157,7 @@ class UserHistory extends StatelessWidget {
                                   ],
                                 ),
                               );
-                            }).toList(),
+                            }),
                           ),
                           const SizedBox(height: 10),
                           Row(
